@@ -7,6 +7,7 @@ const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
 
   const navLinks = [
+    { name: "Content", href: "#content" },
     { name: "Features", href: "#features" },
     { name: "Pricing", href: "#pricing" },
     { name: "Devices", href: "#devices" },
@@ -78,6 +79,12 @@ const Navbar = () => {
                 </a>
               ))}
               <div className="flex flex-col gap-2 pt-4 border-t border-border/30">
+                <Link to="/admin" onClick={() => setIsOpen(false)}>
+                  <Button variant="ghost" className="w-full justify-center">
+                    <Settings className="w-4 h-4 mr-1" />
+                    Admin
+                  </Button>
+                </Link>
                 <Button variant="ghost" className="w-full justify-center">
                   Sign In
                 </Button>
