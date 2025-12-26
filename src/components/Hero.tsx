@@ -1,7 +1,9 @@
 import { Button } from "@/components/ui/button";
-import { Play, Zap, Globe, Shield } from "lucide-react";
+import { Play, Zap, Globe, Shield, MessageCircle } from "lucide-react";
 
 const Hero = () => {
+  const whatsappUrl = "https://wa.me/19177304481";
+
   return (
     <section className="relative min-h-screen flex items-center justify-center pt-20 overflow-hidden">
       {/* Background Effects */}
@@ -35,11 +37,14 @@ const Hero = () => {
 
           {/* CTA Buttons */}
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-16 animate-fade-up" style={{ animationDelay: "0.3s" }}>
-            <Button variant="hero" size="xl" className="w-full sm:w-auto">
-              <Play className="w-5 h-5" />
-              Start Free Trial
-            </Button>
+            <a href={whatsappUrl} target="_blank" rel="noopener noreferrer" className="w-full sm:w-auto">
+              <Button variant="hero" size="xl" className="w-full">
+                <MessageCircle className="w-5 h-5" />
+                Start Free Trial
+              </Button>
+            </a>
             <Button variant="glass" size="xl" className="w-full sm:w-auto">
+              <Play className="w-5 h-5" />
               View Channels
             </Button>
           </div>

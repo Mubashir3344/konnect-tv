@@ -23,7 +23,7 @@ const Navbar = () => {
             <div className="w-10 h-10 rounded-xl bg-primary flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
               <Tv className="w-5 h-5 text-primary-foreground" />
             </div>
-            <span className="text-xl font-bold text-foreground">StreamVision</span>
+            <span className="text-xl font-bold text-foreground">StreamFlux</span>
           </a>
 
           {/* Desktop Nav */}
@@ -50,9 +50,11 @@ const Navbar = () => {
             <Button variant="ghost" size="sm">
               Sign In
             </Button>
-            <Button variant="hero" size="sm">
-              Get Started
-            </Button>
+            <a href="https://wa.me/19177304481" target="_blank" rel="noopener noreferrer">
+              <Button variant="hero" size="sm">
+                Get Started
+              </Button>
+            </a>
           </div>
 
           {/* Mobile Menu Button */}
@@ -88,9 +90,11 @@ const Navbar = () => {
                 <Button variant="ghost" className="w-full justify-center">
                   Sign In
                 </Button>
-                <Button variant="hero" className="w-full justify-center">
-                  Get Started
-                </Button>
+                <a href="https://wa.me/19177304481" target="_blank" rel="noopener noreferrer" className="w-full">
+                  <Button variant="hero" className="w-full justify-center">
+                    Get Started
+                  </Button>
+                </a>
               </div>
             </div>
           </div>
