@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import { Check, Zap } from "lucide-react";
+import { Check, Zap, MessageCircle } from "lucide-react";
 
 const plans = [
   {
@@ -51,6 +51,8 @@ const plans = [
     popular: false,
   },
 ];
+
+const whatsappUrl = "https://wa.me/19177304481";
 
 const Pricing = () => {
   return (
@@ -117,13 +119,16 @@ const Pricing = () => {
                 ))}
               </ul>
 
-              <Button
-                variant={plan.popular ? "hero" : "glass"}
-                className="w-full"
-                size="lg"
-              >
-                Get Started
-              </Button>
+              <a href={whatsappUrl} target="_blank" rel="noopener noreferrer" className="w-full">
+                <Button
+                  variant={plan.popular ? "hero" : "glass"}
+                  className="w-full"
+                  size="lg"
+                >
+                  <MessageCircle className="w-4 h-4" />
+                  Get Started
+                </Button>
+              </a>
             </div>
           ))}
         </div>
