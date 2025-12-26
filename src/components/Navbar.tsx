@@ -1,6 +1,7 @@
 import { useState } from "react";
+import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { Menu, X, Tv } from "lucide-react";
+import { Menu, X, Tv, Settings } from "lucide-react";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -39,6 +40,12 @@ const Navbar = () => {
 
           {/* CTA Buttons */}
           <div className="hidden md:flex items-center gap-3">
+            <Link to="/admin">
+              <Button variant="ghost" size="sm">
+                <Settings className="w-4 h-4 mr-1" />
+                Admin
+              </Button>
+            </Link>
             <Button variant="ghost" size="sm">
               Sign In
             </Button>
