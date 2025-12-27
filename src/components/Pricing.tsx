@@ -161,6 +161,13 @@ const Pricing = () => {
     return discounts[duration] || 0;
   };
 
+  const generateWhatsAppUrl = (planName: string, duration: string, connection: string, price: number) => {
+    const durationLabel = getDurationLabel(duration);
+    const connectionLabel = getConnectionLabel(connection);
+    const message = `Hi! I'm interested in the *${planName} Plan*.\n\n📋 *Order Details:*\n• Plan: ${planName}\n• Duration: ${durationLabel}\n• Connections: ${connectionLabel}\n• Total Price: $${price}\n\nPlease help me get started!`;
+    return `https://wa.me/19177304481?text=${encodeURIComponent(message)}`;
+  };
+
   return (
     <section id="pricing" className="py-24 relative">
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_bottom,_hsl(199_89%_48%_/_0.06)_0%,_transparent_60%)]" />
@@ -287,7 +294,12 @@ const Pricing = () => {
                   ))}
                 </ul>
 
-                <a href={whatsappUrl} target="_blank" rel="noopener noreferrer" className="w-full">
+                <a 
+                  href={generateWhatsAppUrl(plan.name, selectedDuration, selectedConnection, currentPrice)} 
+                  target="_blank" 
+                  rel="noopener noreferrer" 
+                  className="w-full"
+                >
                   <Button
                     variant={plan.popular ? "hero" : "glass"}
                     className="w-full"
