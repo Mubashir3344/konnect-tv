@@ -91,9 +91,6 @@ const ContentRow = ({ title, icon, items, type, autoSlide = true }: ContentRowPr
             {icon}
           </div>
           <h2 className="text-xl md:text-2xl font-bold text-foreground">{title}</h2>
-          <span className="text-xs text-muted-foreground bg-secondary px-2 py-1 rounded-full">
-            {items.length} items
-          </span>
         </div>
         <div className="flex items-center gap-2">
           <button
