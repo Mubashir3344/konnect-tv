@@ -61,18 +61,17 @@ const ContentRow = ({ title, icon, items, type, autoSlide = true }: ContentRowPr
         
         scrollRef.current.scrollLeft += scrollSpeedRef.current;
         
-        // Reset to middle for infinite loop in both directions
-        const { scrollLeft, scrollWidth, clientWidth } = scrollRef.current;
+        // Seamless infinite loop - reset exactly by one set width
+        const { scrollLeft, scrollWidth } = scrollRef.current;
         const singleSetWidth = scrollWidth / 3;
-        const maxScroll = scrollWidth - clientWidth;
         
-        // When scrolling right and reaching near end, jump back to middle
-        if (scrollLeft >= singleSetWidth * 1.8 || scrollLeft >= maxScroll - 10) {
-          scrollRef.current.scrollLeft = singleSetWidth * 0.8;
+        // When scrolling right past middle set, jump back by exactly one set
+        if (scrollLeft >= singleSetWidth * 2) {
+          scrollRef.current.scrollLeft = scrollLeft - singleSetWidth;
         }
-        // When scrolling left and reaching near start, jump forward to middle
-        else if (scrollLeft <= singleSetWidth * 0.2 || scrollLeft <= 10) {
-          scrollRef.current.scrollLeft = singleSetWidth * 1.2;
+        // When scrolling left before middle set, jump forward by exactly one set
+        else if (scrollLeft < singleSetWidth) {
+          scrollRef.current.scrollLeft = scrollLeft + singleSetWidth;
         }
       }
       animationRef.current = requestAnimationFrame(animate);
