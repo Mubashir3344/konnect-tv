@@ -84,7 +84,7 @@ const ContentRow = ({ title, icon, items, type, autoSlide = true }: ContentRowPr
           <div
             key={item.id}
             className={`group flex-shrink-0 ${
-              type === 'portrait' ? 'w-48 sm:w-52 md:w-56' : 'w-64 sm:w-72 md:w-80'
+              type === 'portrait' ? 'w-36 sm:w-40 md:w-44' : 'w-72 sm:w-80 md:w-96'
             }`}
           >
             {/* Card */}
