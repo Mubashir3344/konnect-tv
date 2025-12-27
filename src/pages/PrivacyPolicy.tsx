@@ -32,7 +32,7 @@ const PrivacyPolicy = () => {
           <section className="glass-card rounded-xl p-6">
             <h2 className="text-xl font-semibold text-foreground mb-4">1. Introduction</h2>
             <p className="text-muted-foreground leading-relaxed">
-              StreamFlux ("we," "our," or "us") is committed to protecting your privacy. This Privacy Policy explains how we collect, use, disclose, and safeguard your information when you use our IPTV streaming services.
+              StreamFlux ("we," "our," or "us") is committed to protecting your privacy. This Privacy Policy explains how we collect, use, disclose, and safeguard your information when you use our streaming services.
             </p>
           </section>
 

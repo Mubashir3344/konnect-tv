@@ -17,7 +17,7 @@ const Hero = () => {
           <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full glass-card mb-8 animate-fade-up">
             <Zap className="w-4 h-4 text-primary" />
             <span className="text-sm text-muted-foreground">
-              Premium IPTV Service • 40,000+ Channels
+              Premium Streaming Service • 40,000+ Channels
             </span>
           </div>
 
