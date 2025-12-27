@@ -1,5 +1,5 @@
 <?php
-require_once '../config.php';
+require_once __DIR__ . '/config.php';
 
 $pdo = getDBConnection();
 $method = $_SERVER['REQUEST_METHOD'];
@@ -144,7 +144,7 @@ switch ($method) {
         
         // If thumbnail is a local file, delete it
         if ($item['thumbnail'] && strpos($item['thumbnail'], 'uploads/') !== false) {
-            $filePath = '../' . $item['thumbnail'];
+            $filePath = __DIR__ . '/' . $item['thumbnail'];
             if (file_exists($filePath)) {
                 unlink($filePath);
             }

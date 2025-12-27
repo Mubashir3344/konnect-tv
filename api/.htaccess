@@ -5,11 +5,6 @@ RewriteEngine On
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
 
-# Route API requests
-RewriteRule ^api/media/?$ api/media.php [L,QSA]
-RewriteRule ^api/media/([0-9]+)/?$ api/media.php?id=$1 [L,QSA]
-RewriteRule ^api/upload/?$ api/upload.php [L,QSA]
-
 # Security headers
 <IfModule mod_headers.c>
     Header always set X-Content-Type-Options "nosniff"
@@ -24,3 +19,9 @@ Options -Indexes
     Order Allow,Deny
     Deny from all
 </Files>
+
+# Allow access to uploads
+<FilesMatch "\.(jpg|jpeg|png|gif|webp)$">
+    Order Allow,Deny
+    Allow from all
+</FilesMatch>

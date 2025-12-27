@@ -1,5 +1,5 @@
 <?php
-require_once '../config.php';
+require_once __DIR__ . '/config.php';
 
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     sendError('Method not allowed', 405);
@@ -39,7 +39,7 @@ if ($file['size'] > $maxSize) {
 }
 
 // Create uploads directory if it doesn't exist
-$uploadDir = '../uploads/';
+$uploadDir = __DIR__ . '/uploads/';
 if (!is_dir($uploadDir)) {
     mkdir($uploadDir, 0755, true);
 }
@@ -51,8 +51,8 @@ $filepath = $uploadDir . $filename;
 
 // Move uploaded file
 if (move_uploaded_file($file['tmp_name'], $filepath)) {
-    // Return the URL path (relative to your domain)
-    $url = 'uploads/' . $filename;
+    // Return the full URL path
+    $url = 'https://streamflux.shop/api/uploads/' . $filename;
     
     sendResponse([
         'success' => true,
