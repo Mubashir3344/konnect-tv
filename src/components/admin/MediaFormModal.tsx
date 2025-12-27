@@ -1,7 +1,9 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { MediaItem } from '@/types/media';
 import { Button } from '@/components/ui/button';
-import { X, Upload } from 'lucide-react';
+import { X, Upload, Loader2, ImageIcon, Link as LinkIcon } from 'lucide-react';
+import { uploadApi } from '@/lib/api';
+import { toast } from 'sonner';
 
 interface MediaFormModalProps {
   isOpen: boolean;
@@ -12,10 +14,15 @@ interface MediaFormModalProps {
 }
 
 const MediaFormModal = ({ isOpen, onClose, onSubmit, editItem, defaultCategory = 'movies' }: MediaFormModalProps) => {
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const [isUploading, setIsUploading] = useState(false);
+  const [uploadMode, setUploadMode] = useState<'upload' | 'url'>('upload');
+  const [previewUrl, setPreviewUrl] = useState<string>('');
+  
   const [formData, setFormData] = useState<Partial<MediaItem>>({
     category: defaultCategory,
     title: '',
-    thumbnail: '/placeholder.svg',
+    thumbnail: '',
     description: '',
     year: '',
     rating: '',
@@ -32,11 +39,12 @@ const MediaFormModal = ({ isOpen, onClose, onSubmit, editItem, defaultCategory =
   useEffect(() => {
     if (editItem) {
       setFormData(editItem);
+      setPreviewUrl(editItem.thumbnail || '');
     } else {
       setFormData({
         category: defaultCategory,
         title: '',
-        thumbnail: '/placeholder.svg',
+        thumbnail: '',
         description: '',
         year: '',
         rating: '',
@@ -49,8 +57,63 @@ const MediaFormModal = ({ isOpen, onClose, onSubmit, editItem, defaultCategory =
         channelName: '',
         isLive: false,
       });
+      setPreviewUrl('');
     }
   }, [editItem, defaultCategory, isOpen]);
+
+  const handleFileSelect = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    // Validate file type
+    if (!file.type.startsWith('image/')) {
+      toast.error('Please select an image file (JPG, PNG, GIF, WEBP)');
+      return;
+    }
+
+    // Validate file size (max 5MB)
+    if (file.size > 5 * 1024 * 1024) {
+      toast.error('Image must be less than 5MB');
+      return;
+    }
+
+    // Show local preview immediately
+    const localPreview = URL.createObjectURL(file);
+    setPreviewUrl(localPreview);
+
+    // Upload to server
+    setIsUploading(true);
+    try {
+      const result = await uploadApi.uploadImage(file);
+      setFormData(prev => ({ ...prev, thumbnail: result.url }));
+      setPreviewUrl(result.url);
+      toast.success('Image uploaded successfully!');
+    } catch (error) {
+      console.error('Upload error:', error);
+      toast.error(error instanceof Error ? error.message : 'Failed to upload image');
+      setPreviewUrl('');
+      setFormData(prev => ({ ...prev, thumbnail: '' }));
+    } finally {
+      setIsUploading(false);
+      // Reset file input
+      if (fileInputRef.current) {
+        fileInputRef.current.value = '';
+      }
+    }
+  };
+
+  const handleUrlChange = (url: string) => {
+    setFormData({ ...formData, thumbnail: url });
+    setPreviewUrl(url);
+  };
+
+  const clearImage = () => {
+    setFormData({ ...formData, thumbnail: '' });
+    setPreviewUrl('');
+    if (fileInputRef.current) {
+      fileInputRef.current.value = '';
+    }
+  };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -273,24 +336,127 @@ const MediaFormModal = ({ isOpen, onClose, onSubmit, editItem, defaultCategory =
             />
           </div>
 
-          {/* Thumbnail URL */}
+          {/* Thumbnail - Upload or URL */}
           <div>
-            <label className="block text-sm font-medium text-foreground mb-2">Thumbnail URL</label>
-            <div className="flex gap-2">
-              <input
-                type="text"
-                value={formData.thumbnail || ''}
-                onChange={(e) => setFormData({ ...formData, thumbnail: e.target.value })}
-                className="flex-1 px-4 py-2.5 rounded-lg bg-secondary border border-border text-foreground focus:outline-none focus:border-primary"
-                placeholder="https://example.com/image.jpg"
-              />
+            <label className="block text-sm font-medium text-foreground mb-2">Thumbnail</label>
+            
+            {/* Mode Toggle */}
+            <div className="flex gap-2 mb-3">
               <button
                 type="button"
-                className="px-4 py-2.5 rounded-lg bg-secondary border border-border hover:border-primary/50 transition-colors"
+                onClick={() => setUploadMode('upload')}
+                className={`flex items-center gap-2 px-3 py-1.5 rounded-lg text-sm font-medium transition-colors ${
+                  uploadMode === 'upload'
+                    ? 'bg-primary text-primary-foreground'
+                    : 'bg-secondary text-muted-foreground hover:text-foreground'
+                }`}
               >
-                <Upload className="w-5 h-5 text-muted-foreground" />
+                <Upload className="w-4 h-4" />
+                Upload
+              </button>
+              <button
+                type="button"
+                onClick={() => setUploadMode('url')}
+                className={`flex items-center gap-2 px-3 py-1.5 rounded-lg text-sm font-medium transition-colors ${
+                  uploadMode === 'url'
+                    ? 'bg-primary text-primary-foreground'
+                    : 'bg-secondary text-muted-foreground hover:text-foreground'
+                }`}
+              >
+                <LinkIcon className="w-4 h-4" />
+                URL
               </button>
             </div>
+
+            {uploadMode === 'upload' ? (
+              <>
+                {/* Hidden file input */}
+                <input
+                  type="file"
+                  ref={fileInputRef}
+                  onChange={handleFileSelect}
+                  accept="image/jpeg,image/png,image/gif,image/webp"
+                  className="hidden"
+                />
+                
+                {/* Upload Area */}
+                {!previewUrl ? (
+                  <button
+                    type="button"
+                    onClick={() => fileInputRef.current?.click()}
+                    disabled={isUploading}
+                    className="w-full h-32 border-2 border-dashed border-border rounded-lg flex flex-col items-center justify-center gap-2 hover:border-primary/50 hover:bg-secondary/50 transition-colors disabled:opacity-50"
+                  >
+                    {isUploading ? (
+                      <>
+                        <Loader2 className="w-8 h-8 text-primary animate-spin" />
+                        <span className="text-sm text-muted-foreground">Uploading...</span>
+                      </>
+                    ) : (
+                      <>
+                        <ImageIcon className="w-8 h-8 text-muted-foreground" />
+                        <span className="text-sm text-muted-foreground">Click to upload image</span>
+                        <span className="text-xs text-muted-foreground/60">JPG, PNG, GIF, WEBP (max 5MB)</span>
+                      </>
+                    )}
+                  </button>
+                ) : (
+                  <div className="relative">
+                    <img
+                      src={previewUrl}
+                      alt="Preview"
+                      className="w-full h-32 object-cover rounded-lg border border-border"
+                      onError={() => {
+                        setPreviewUrl('');
+                        toast.error('Failed to load image');
+                      }}
+                    />
+                    <button
+                      type="button"
+                      onClick={clearImage}
+                      className="absolute top-2 right-2 p-1.5 bg-destructive text-destructive-foreground rounded-full hover:bg-destructive/80 transition-colors"
+                    >
+                      <X className="w-4 h-4" />
+                    </button>
+                    {isUploading && (
+                      <div className="absolute inset-0 bg-background/50 rounded-lg flex items-center justify-center">
+                        <Loader2 className="w-8 h-8 text-primary animate-spin" />
+                      </div>
+                    )}
+                  </div>
+                )}
+              </>
+            ) : (
+              <>
+                {/* URL Input */}
+                <input
+                  type="url"
+                  value={formData.thumbnail || ''}
+                  onChange={(e) => handleUrlChange(e.target.value)}
+                  className="w-full px-4 py-2.5 rounded-lg bg-secondary border border-border text-foreground focus:outline-none focus:border-primary"
+                  placeholder="https://example.com/image.jpg"
+                />
+                
+                {/* URL Preview */}
+                {previewUrl && (
+                  <div className="mt-3 relative">
+                    <img
+                      src={previewUrl}
+                      alt="Preview"
+                      className="w-full h-32 object-cover rounded-lg border border-border"
+                      onError={() => setPreviewUrl('')}
+                    />
+                    <button
+                      type="button"
+                      onClick={clearImage}
+                      className="absolute top-2 right-2 p-1.5 bg-destructive text-destructive-foreground rounded-full hover:bg-destructive/80 transition-colors"
+                    >
+                      <X className="w-4 h-4" />
+                    </button>
+                  </div>
+                )}
+              </>
+            )}
           </div>
 
           {/* Live Toggle */}
@@ -317,7 +483,7 @@ const MediaFormModal = ({ isOpen, onClose, onSubmit, editItem, defaultCategory =
             <Button type="button" variant="glass" onClick={onClose} className="flex-1">
               Cancel
             </Button>
-            <Button type="submit" variant="hero" className="flex-1">
+            <Button type="submit" variant="hero" className="flex-1" disabled={isUploading}>
               {editItem ? 'Save Changes' : 'Add Media'}
             </Button>
           </div>
