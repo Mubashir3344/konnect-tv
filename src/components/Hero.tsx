@@ -1,11 +1,18 @@
 import { Button } from "@/components/ui/button";
-import { Play, Zap, Globe, Shield, MessageCircle } from "lucide-react";
+import { Play, Zap, MessageCircle } from "lucide-react";
+import TypewriterText from "./TypewriterText";
+import FloatingMedia from "./FloatingMedia";
+import CountingStats from "./CountingStats";
 
 const Hero = () => {
   const whatsappUrl = "https://wa.me/19177304481";
+  const typewriterWords = ["Movies", "Sports", "Series", "Live TV", "Entertainment"];
 
   return (
     <section className="relative min-h-screen flex items-center justify-center pt-20 overflow-hidden">
+      {/* Floating Media Background */}
+      <FloatingMedia />
+      
       {/* Background Effects */}
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_hsl(199_89%_48%_/_0.08)_0%,_transparent_50%)]" />
       <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-primary/5 rounded-full blur-3xl" />
@@ -21,12 +28,12 @@ const Hero = () => {
             </span>
           </div>
 
-          {/* Headline */}
+          {/* Headline with Typewriter */}
           <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold mb-6 leading-tight animate-fade-up" style={{ animationDelay: "0.1s" }}>
-            <span className="text-foreground">Unlimited </span>
-            <span className="gradient-text">Entertainment</span>
+            <span className="text-foreground">Stream </span>
+            <TypewriterText words={typewriterWords} />
             <br />
-            <span className="text-foreground">At Your Fingertips</span>
+            <span className="text-foreground">Anytime, Anywhere</span>
           </h1>
 
           {/* Subheadline */}
@@ -49,30 +56,8 @@ const Hero = () => {
             </Button>
           </div>
 
-          {/* Trust Badges */}
-          <div className="grid grid-cols-3 gap-6 max-w-xl mx-auto animate-fade-up" style={{ animationDelay: "0.4s" }}>
-            <div className="text-center">
-              <div className="flex items-center justify-center w-12 h-12 mx-auto mb-3 rounded-xl bg-secondary">
-                <Globe className="w-6 h-6 text-primary" />
-              </div>
-              <p className="text-2xl font-bold text-foreground">50K+</p>
-              <p className="text-sm text-muted-foreground">Live Channels</p>
-            </div>
-            <div className="text-center">
-              <div className="flex items-center justify-center w-12 h-12 mx-auto mb-3 rounded-xl bg-secondary">
-                <Play className="w-6 h-6 text-primary" />
-              </div>
-              <p className="text-2xl font-bold text-foreground">200K+</p>
-              <p className="text-sm text-muted-foreground">Movies & Shows</p>
-            </div>
-            <div className="text-center">
-              <div className="flex items-center justify-center w-12 h-12 mx-auto mb-3 rounded-xl bg-secondary">
-                <Shield className="w-6 h-6 text-primary" />
-              </div>
-              <p className="text-2xl font-bold text-foreground">99.9%</p>
-              <p className="text-sm text-muted-foreground">Uptime</p>
-            </div>
-          </div>
+          {/* Counting Stats with 3D Hover */}
+          <CountingStats />
         </div>
       </div>
 
