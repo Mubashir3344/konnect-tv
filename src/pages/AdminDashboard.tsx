@@ -39,7 +39,7 @@ const AdminDashboard = () => {
 
   const tabs = [
     { id: 'all', label: 'All Media', icon: LayoutGrid, count: mediaItems.length },
-    { id: 'football', label: 'Football', icon: Trophy, count: mediaItems.filter(i => i.category === 'football').length },
+    { id: 'football', label: 'Football Leagues', icon: Trophy, count: mediaItems.filter(i => i.category === 'football').length },
     { id: 'sports', label: 'Sports Channels', icon: Radio, count: mediaItems.filter(i => i.category === 'sports').length },
     { id: 'movies', label: 'Movies', icon: Film, count: mediaItems.filter(i => i.category === 'movies').length },
     { id: 'series', label: 'TV Series', icon: Clapperboard, count: mediaItems.filter(i => i.category === 'series').length },
