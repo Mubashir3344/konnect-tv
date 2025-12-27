@@ -32,25 +32,26 @@ const ContentRow = ({ title, icon, items, type, autoSlide = true }: ContentRowPr
     if (!scrollRef.current || items.length === 0) return;
     
     const { scrollLeft, scrollWidth, clientWidth } = scrollRef.current;
-    const itemWidth = scrollWidth / 3; // Since we have 3 copies
+    const singleSetWidth = scrollWidth / 3; // Since we have 3 copies
     
-    // If scrolled to the end, jump to the middle set
-    if (scrollLeft >= itemWidth * 2 - 10) {
-      scrollRef.current.scrollLeft = itemWidth;
+    // If scrolled past the end of second set, jump back to middle set
+    if (scrollLeft >= singleSetWidth * 2) {
+      scrollRef.current.scrollLeft = scrollLeft - singleSetWidth;
     }
-    // If scrolled to the beginning, jump to the middle set
-    else if (scrollLeft <= 10) {
-      scrollRef.current.scrollLeft = itemWidth;
+    // If scrolled before the start of first set, jump forward to middle set
+    else if (scrollLeft < singleSetWidth * 0.1) {
+      scrollRef.current.scrollLeft = scrollLeft + singleSetWidth;
     }
   }, [items.length]);
 
   // Initialize scroll position to middle set
   useEffect(() => {
     if (scrollRef.current && items.length > 0) {
-      const itemWidth = scrollRef.current.scrollWidth / 3;
-      scrollRef.current.scrollLeft = itemWidth;
+      // Set initial scroll to the start of the middle (second) set
+      const singleSetWidth = scrollRef.current.scrollWidth / 3;
+      scrollRef.current.scrollLeft = singleSetWidth;
     }
-  }, [items.length]);
+  }, [items.length, loopedItems.length]);
 
   // Intersection Observer - only auto-slide when in viewport
   useEffect(() => {
