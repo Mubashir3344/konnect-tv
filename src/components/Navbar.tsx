@@ -1,7 +1,6 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { Menu, X, Tv, Settings } from "lucide-react";
+import { Menu, X, Tv } from "lucide-react";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -19,7 +18,7 @@ const Navbar = () => {
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between h-16 md:h-20">
           {/* Logo */}
-          <a href="#" className="flex items-center gap-2 group">
+          <a href="/" className="flex items-center gap-2 group">
             <div className="w-10 h-10 rounded-xl bg-primary flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
               <Tv className="w-5 h-5 text-primary-foreground" />
             </div>
@@ -39,17 +38,8 @@ const Navbar = () => {
             ))}
           </div>
 
-          {/* CTA Buttons */}
+          {/* CTA Button */}
           <div className="hidden md:flex items-center gap-3">
-            <Link to="/admin">
-              <Button variant="ghost" size="sm">
-                <Settings className="w-4 h-4 mr-1" />
-                Admin
-              </Button>
-            </Link>
-            <Button variant="ghost" size="sm">
-              Sign In
-            </Button>
             <a href="https://wa.me/19177304481" target="_blank" rel="noopener noreferrer">
               <Button variant="hero" size="sm">
                 Get Started
@@ -81,15 +71,6 @@ const Navbar = () => {
                 </a>
               ))}
               <div className="flex flex-col gap-2 pt-4 border-t border-border/30">
-                <Link to="/admin" onClick={() => setIsOpen(false)}>
-                  <Button variant="ghost" className="w-full justify-center">
-                    <Settings className="w-4 h-4 mr-1" />
-                    Admin
-                  </Button>
-                </Link>
-                <Button variant="ghost" className="w-full justify-center">
-                  Sign In
-                </Button>
                 <a href="https://wa.me/19177304481" target="_blank" rel="noopener noreferrer" className="w-full">
                   <Button variant="hero" className="w-full justify-center">
                     Get Started
