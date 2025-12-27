@@ -17,8 +17,8 @@ const ContentRow = ({ title, icon, items, type, autoSlide = true }: ContentRowPr
   const [isVisible, setIsVisible] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
 
-  // Duplicate items for infinite loop effect
-  const loopedItems = items.length > 0 ? [...items, ...items, ...items] : [];
+  // Duplicate items for infinite loop effect (5 copies for smoother looping)
+  const loopedItems = items.length > 0 ? [...items, ...items, ...items, ...items, ...items] : [];
 
   const scroll = (direction: 'left' | 'right') => {
     if (scrollRef.current) {
@@ -31,25 +31,25 @@ const ContentRow = ({ title, icon, items, type, autoSlide = true }: ContentRowPr
   const handleScroll = useCallback(() => {
     if (!scrollRef.current || items.length === 0) return;
     
-    const { scrollLeft, scrollWidth, clientWidth } = scrollRef.current;
-    const singleSetWidth = scrollWidth / 3; // Since we have 3 copies
+    const { scrollLeft, scrollWidth } = scrollRef.current;
+    const singleSetWidth = scrollWidth / 5; // Since we have 5 copies
     
-    // If scrolled past the end of second set, jump back to middle set
-    if (scrollLeft >= singleSetWidth * 2) {
-      scrollRef.current.scrollLeft = scrollLeft - singleSetWidth;
+    // If scrolled too far right, jump back
+    if (scrollLeft >= singleSetWidth * 4) {
+      scrollRef.current.scrollLeft = singleSetWidth * 2;
     }
-    // If scrolled before the start of first set, jump forward to middle set
-    else if (scrollLeft < singleSetWidth * 0.1) {
-      scrollRef.current.scrollLeft = scrollLeft + singleSetWidth;
+    // If scrolled too far left, jump forward
+    else if (scrollLeft <= singleSetWidth * 0.5) {
+      scrollRef.current.scrollLeft = singleSetWidth * 2;
     }
   }, [items.length]);
 
   // Initialize scroll position to middle set
   useEffect(() => {
     if (scrollRef.current && items.length > 0) {
-      // Set initial scroll to the start of the middle (second) set
-      const singleSetWidth = scrollRef.current.scrollWidth / 3;
-      scrollRef.current.scrollLeft = singleSetWidth;
+      // Set initial scroll to the middle
+      const singleSetWidth = scrollRef.current.scrollWidth / 5;
+      scrollRef.current.scrollLeft = singleSetWidth * 2;
     }
   }, [items.length, loopedItems.length]);
 
