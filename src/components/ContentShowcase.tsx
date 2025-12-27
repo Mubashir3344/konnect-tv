@@ -232,10 +232,10 @@ const ContentShowcase = () => {
           </p>
         </div>
 
-        {/* Live Football */}
+        {/* Football Leagues */}
         {footballMatches.length > 0 && (
           <ContentRow
-            title="Live Football Matches"
+            title="Football Leagues"
             icon={<Trophy className="w-5 h-5 text-green-400" />}
             items={footballMatches}
             type="landscape"
