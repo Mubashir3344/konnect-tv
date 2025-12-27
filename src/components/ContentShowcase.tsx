@@ -83,14 +83,12 @@ const ContentRow = ({ title, icon, items, type, autoSlide = true }: ContentRowPr
         {items.map((item) => (
           <div
             key={item.id}
-            className={`group flex-shrink-0 ${
-              type === 'portrait' ? 'w-36 sm:w-40 md:w-44' : 'w-72 sm:w-80 md:w-96'
-            }`}
+            className="group flex-shrink-0 w-64 sm:w-72 md:w-80"
           >
             {/* Card */}
             <div className="relative rounded-xl overflow-hidden glass-card hover:border-primary/30 transition-all duration-300 cursor-pointer">
               {/* Thumbnail */}
-              <div className={`relative overflow-hidden ${type === 'portrait' ? 'aspect-[2/3]' : 'aspect-video'}`}>
+              <div className="relative overflow-hidden aspect-video">
                 <img
                   src={item.thumbnail}
                   alt={item.title}
