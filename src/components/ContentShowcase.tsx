@@ -1,172 +1,19 @@
-import { useRef } from 'react';
+import { useRef, useEffect, useState } from 'react';
 import { ChevronLeft, ChevronRight, Play, Star, Calendar, Clock, Tv, Trophy, Radio } from 'lucide-react';
-
-// Import images
-import football1 from '@/assets/football-1.jpg';
-import football2 from '@/assets/football-2.jpg';
-import football3 from '@/assets/football-3.jpg';
-import sportsChannel1 from '@/assets/sports-channel-1.jpg';
-import sportsChannel2 from '@/assets/sports-channel-2.jpg';
-import sportsChannel3 from '@/assets/sports-channel-3.jpg';
-import movie1 from '@/assets/movie-1.jpg';
-import movie2 from '@/assets/movie-2.jpg';
-import movie3 from '@/assets/movie-3.jpg';
-import series1 from '@/assets/series-1.jpg';
-import series2 from '@/assets/series-2.jpg';
-import series3 from '@/assets/series-3.jpg';
-
-interface MediaItem {
-  id: string;
-  title: string;
-  thumbnail: string;
-  category: 'football' | 'sports' | 'movies' | 'series';
-  description?: string;
-  year?: string;
-  rating?: string;
-  duration?: string;
-  season?: number;
-  episode?: number;
-  league?: string;
-  matchDate?: string;
-  teams?: string;
-  channelName?: string;
-  isLive?: boolean;
-}
-
-// Demo data with real images
-const demoMedia: MediaItem[] = [
-  // Football Matches
-  {
-    id: '1',
-    title: 'Manchester United vs Liverpool',
-    thumbnail: football1,
-    category: 'football',
-    league: 'Premier League',
-    matchDate: '2024-01-15',
-    teams: 'Man United vs Liverpool',
-    isLive: true,
-  },
-  {
-    id: '2',
-    title: 'Barcelona vs Real Madrid',
-    thumbnail: football2,
-    category: 'football',
-    league: 'La Liga',
-    matchDate: '2024-01-16',
-    teams: 'Barcelona vs Real Madrid',
-    isLive: false,
-  },
-  {
-    id: '3',
-    title: 'Bayern Munich vs Dortmund',
-    thumbnail: football3,
-    category: 'football',
-    league: 'Bundesliga',
-    matchDate: '2024-01-17',
-    teams: 'Bayern vs Dortmund',
-    isLive: false,
-  },
-  // Sports Channels
-  {
-    id: '4',
-    title: 'ESPN HD',
-    thumbnail: sportsChannel1,
-    category: 'sports',
-    channelName: 'ESPN',
-    isLive: true,
-  },
-  {
-    id: '5',
-    title: 'NBA League Pass',
-    thumbnail: sportsChannel2,
-    category: 'sports',
-    channelName: 'NBA TV',
-    isLive: true,
-  },
-  {
-    id: '6',
-    title: 'UFC Fight Night',
-    thumbnail: sportsChannel3,
-    category: 'sports',
-    channelName: 'UFC',
-    isLive: true,
-  },
-  // Movies
-  {
-    id: '7',
-    title: 'The Dark Knight',
-    thumbnail: movie1,
-    category: 'movies',
-    year: '2008',
-    rating: '9.0',
-    duration: '2h 32m',
-    description: 'When the menace known as the Joker wreaks havoc on Gotham...',
-  },
-  {
-    id: '8',
-    title: 'Interstellar',
-    thumbnail: movie2,
-    category: 'movies',
-    year: '2014',
-    rating: '8.6',
-    duration: '2h 49m',
-    description: 'A team of explorers travel through a wormhole in space...',
-  },
-  {
-    id: '9',
-    title: 'Fast & Furious',
-    thumbnail: movie3,
-    category: 'movies',
-    year: '2023',
-    rating: '7.8',
-    duration: '2h 21m',
-    description: 'Dom and his crew face their most dangerous adversary yet...',
-  },
-  // TV Series
-  {
-    id: '10',
-    title: 'Breaking Bad',
-    thumbnail: series1,
-    category: 'series',
-    year: '2008',
-    rating: '9.5',
-    season: 5,
-    episode: 62,
-    description: 'A high school chemistry teacher turned meth manufacturer...',
-  },
-  {
-    id: '11',
-    title: 'House of the Dragon',
-    thumbnail: series2,
-    category: 'series',
-    year: '2022',
-    rating: '8.9',
-    season: 2,
-    episode: 18,
-    description: 'The reign of House Targaryen begins with this prequel...',
-  },
-  {
-    id: '12',
-    title: 'Stranger Things',
-    thumbnail: series3,
-    category: 'series',
-    year: '2016',
-    rating: '8.7',
-    season: 4,
-    episode: 34,
-    description: 'When a young boy disappears, his friends uncover a mystery...',
-  },
-];
+import { MediaItem } from '@/types/media';
+import { getMediaItems } from '@/lib/mediaStorage';
 
 interface ContentRowProps {
   title: string;
   icon: React.ReactNode;
   items: MediaItem[];
   type: 'landscape' | 'portrait';
+  autoSlide?: boolean;
 }
 
-const ContentRow = ({ title, icon, items, type }: ContentRowProps) => {
+const ContentRow = ({ title, icon, items, type, autoSlide = true }: ContentRowProps) => {
   const scrollRef = useRef<HTMLDivElement>(null);
+  const [isPaused, setIsPaused] = useState(false);
 
   const scroll = (direction: 'left' | 'right') => {
     if (scrollRef.current) {
@@ -174,6 +21,27 @@ const ContentRow = ({ title, icon, items, type }: ContentRowProps) => {
       scrollRef.current.scrollBy({ left: scrollAmount, behavior: 'smooth' });
     }
   };
+
+  // Auto-scroll effect
+  useEffect(() => {
+    if (!autoSlide || isPaused || items.length <= 3) return;
+
+    const interval = setInterval(() => {
+      if (scrollRef.current) {
+        const { scrollLeft, scrollWidth, clientWidth } = scrollRef.current;
+        const maxScroll = scrollWidth - clientWidth;
+        
+        if (scrollLeft >= maxScroll - 10) {
+          // Reset to start smoothly
+          scrollRef.current.scrollTo({ left: 0, behavior: 'smooth' });
+        } else {
+          scrollRef.current.scrollBy({ left: 300, behavior: 'smooth' });
+        }
+      }
+    }, 3000);
+
+    return () => clearInterval(interval);
+  }, [autoSlide, isPaused, items.length]);
 
   return (
     <div className="mb-12">
@@ -184,6 +52,9 @@ const ContentRow = ({ title, icon, items, type }: ContentRowProps) => {
             {icon}
           </div>
           <h2 className="text-xl md:text-2xl font-bold text-foreground">{title}</h2>
+          <span className="text-xs text-muted-foreground bg-secondary px-2 py-1 rounded-full">
+            {items.length} items
+          </span>
         </div>
         <div className="flex items-center gap-2">
           <button
@@ -206,6 +77,8 @@ const ContentRow = ({ title, icon, items, type }: ContentRowProps) => {
         ref={scrollRef}
         className="flex gap-4 overflow-x-auto scrollbar-hide pb-4 -mx-4 px-4"
         style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
+        onMouseEnter={() => setIsPaused(true)}
+        onMouseLeave={() => setIsPaused(false)}
       >
         {items.map((item) => (
           <div
@@ -222,6 +95,9 @@ const ContentRow = ({ title, icon, items, type }: ContentRowProps) => {
                   src={item.thumbnail}
                   alt={item.title}
                   className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                  onError={(e) => {
+                    (e.target as HTMLImageElement).src = '/placeholder.svg';
+                  }}
                 />
 
                 {/* Live Badge */}
@@ -295,10 +171,18 @@ const ContentRow = ({ title, icon, items, type }: ContentRowProps) => {
 };
 
 const ContentShowcase = () => {
-  const footballMatches = demoMedia.filter(m => m.category === 'football');
-  const sportsChannels = demoMedia.filter(m => m.category === 'sports');
-  const movies = demoMedia.filter(m => m.category === 'movies');
-  const series = demoMedia.filter(m => m.category === 'series');
+  const [mediaItems, setMediaItems] = useState<MediaItem[]>([]);
+
+  useEffect(() => {
+    // Load from admin panel storage
+    const items = getMediaItems();
+    setMediaItems(items);
+  }, []);
+
+  const footballMatches = mediaItems.filter(m => m.category === 'football');
+  const sportsChannels = mediaItems.filter(m => m.category === 'sports');
+  const movies = mediaItems.filter(m => m.category === 'movies');
+  const series = mediaItems.filter(m => m.category === 'series');
 
   return (
     <section id="content" className="py-24 relative">
@@ -318,36 +202,44 @@ const ContentShowcase = () => {
         </div>
 
         {/* Live Football */}
-        <ContentRow
-          title="Live Football Matches"
-          icon={<Trophy className="w-5 h-5 text-green-400" />}
-          items={footballMatches}
-          type="landscape"
-        />
+        {footballMatches.length > 0 && (
+          <ContentRow
+            title="Live Football Matches"
+            icon={<Trophy className="w-5 h-5 text-green-400" />}
+            items={footballMatches}
+            type="landscape"
+          />
+        )}
 
         {/* Sports Channels */}
-        <ContentRow
-          title="Sports Channels"
-          icon={<Radio className="w-5 h-5 text-orange-400" />}
-          items={sportsChannels}
-          type="landscape"
-        />
+        {sportsChannels.length > 0 && (
+          <ContentRow
+            title="Sports Channels"
+            icon={<Radio className="w-5 h-5 text-orange-400" />}
+            items={sportsChannels}
+            type="landscape"
+          />
+        )}
 
         {/* Movies */}
-        <ContentRow
-          title="Popular Movies"
-          icon={<Play className="w-5 h-5 text-purple-400" />}
-          items={movies}
-          type="portrait"
-        />
+        {movies.length > 0 && (
+          <ContentRow
+            title="Popular Movies"
+            icon={<Play className="w-5 h-5 text-purple-400" />}
+            items={movies}
+            type="portrait"
+          />
+        )}
 
         {/* TV Series */}
-        <ContentRow
-          title="Trending Series"
-          icon={<Tv className="w-5 h-5 text-blue-400" />}
-          items={series}
-          type="portrait"
-        />
+        {series.length > 0 && (
+          <ContentRow
+            title="Trending Series"
+            icon={<Tv className="w-5 h-5 text-blue-400" />}
+            items={series}
+            type="portrait"
+          />
+        )}
       </div>
     </section>
   );
