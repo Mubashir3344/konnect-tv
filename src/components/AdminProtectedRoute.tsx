@@ -5,7 +5,7 @@ import { Tv, Lock, Eye, EyeOff } from 'lucide-react';
 import { toast } from 'sonner';
 
 // Hardcoded credentials
-const ADMIN_EMAIL = "admin@streamflux.tv";
+const ADMIN_EMAIL = "admin@streamflux.shop";
 const ADMIN_PASSWORD = "StreamFlux@2024";
 
 interface AdminLoginProps {
