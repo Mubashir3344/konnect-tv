@@ -10,13 +10,28 @@ import {
 } from "@/components/ui/select";
 
 const durations = [
-  { value: "1", label: "1 Month", hot: false },
-  { value: "3", label: "3 Months", hot: false },
-  { value: "6", label: "6 Months", hot: false },
-  { value: "12", label: "12 Months", hot: true },
-  { value: "24", label: "24 Months", hot: true },
-  { value: "lifetime", label: "Lifetime", hot: true },
+  { value: "1", label: "1 Month" },
+  { value: "3", label: "3 Months" },
+  { value: "6", label: "6 Months" },
+  { value: "12", label: "12 Months" },
+  { value: "24", label: "24 Months" },
+  { value: "lifetime", label: "Lifetime" },
 ];
+
+const connections = [
+  { value: "1", label: "1 Connection" },
+  { value: "2", label: "2 Connections" },
+  { value: "3", label: "3 Connections" },
+  { value: "5", label: "5 Connections" },
+];
+
+// Connection multipliers for pricing
+const connectionMultipliers: Record<string, number> = {
+  "1": 1,
+  "2": 1.7,
+  "3": 2.3,
+  "5": 3.5,
+};
 
 const plans = [
   {
@@ -26,7 +41,6 @@ const plans = [
       "22,000 Live TV Channels",
       "85,000 Movies & TV Series",
       "HD Quality",
-      "1 Device Connection",
       "24/7 Support",
     ],
     popular: false,
@@ -46,7 +60,6 @@ const plans = [
       "30,000 Live TV Channels",
       "110,000 Movies & TV Series",
       "HD & FHD Quality",
-      "2 Device Connections",
       "24/7 Priority Support",
       "7-Day Catch-Up",
     ],
@@ -67,7 +80,6 @@ const plans = [
       "50,000 Live TV Channels",
       "200,000 Movies & TV Series",
       "HD, FHD & 4K Quality",
-      "4 Device Connections",
       "24/7 VIP Support",
       "14-Day Catch-Up",
       "PPV Events Included",
@@ -93,10 +105,23 @@ const Pricing = () => {
     2: "1",
   });
 
+  const [selectedConnections, setSelectedConnections] = useState<Record<number, string>>({
+    0: "1",
+    1: "1",
+    2: "1",
+  });
+
   const handleDurationChange = (planIndex: number, duration: string) => {
     setSelectedDurations((prev) => ({
       ...prev,
       [planIndex]: duration,
+    }));
+  };
+
+  const handleConnectionChange = (planIndex: number, connection: string) => {
+    setSelectedConnections((prev) => ({
+      ...prev,
+      [planIndex]: connection,
     }));
   };
 
@@ -105,9 +130,14 @@ const Pricing = () => {
     return duration?.label || "1 Month";
   };
 
-  const isHotDuration = (value: string) => {
-    const duration = durations.find((d) => d.value === value);
-    return duration?.hot || false;
+  const getConnectionLabel = (value: string) => {
+    const connection = connections.find((c) => c.value === value);
+    return connection?.label || "1 Connection";
+  };
+
+  const calculatePrice = (basePrice: number, connectionCount: string) => {
+    const multiplier = connectionMultipliers[connectionCount] || 1;
+    return Math.round(basePrice * multiplier);
   };
 
   return (
@@ -129,7 +159,9 @@ const Pricing = () => {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8 max-w-6xl mx-auto">
           {plans.map((plan, index) => {
             const selectedDuration = selectedDurations[index] || "1";
-            const currentPrice = plan.pricing[selectedDuration as keyof typeof plan.pricing];
+            const selectedConnection = selectedConnections[index] || "1";
+            const basePrice = plan.pricing[selectedDuration as keyof typeof plan.pricing];
+            const currentPrice = calculatePrice(basePrice, selectedConnection);
 
             return (
               <div
@@ -170,13 +202,30 @@ const Pricing = () => {
                     value={selectedDuration}
                     onValueChange={(value) => handleDurationChange(index, value)}
                   >
-                    <SelectTrigger className="w-full bg-muted/50 border-border/50">
+                    <SelectTrigger className="w-full bg-muted/50 border-border/50 mb-3">
                       <SelectValue>{getDurationLabel(selectedDuration)}</SelectValue>
                     </SelectTrigger>
                     <SelectContent>
                       {durations.map((duration) => (
                         <SelectItem key={duration.value} value={duration.value}>
-                          {duration.label} - ${plan.pricing[duration.value as keyof typeof plan.pricing]}
+                          {duration.label}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+
+                  {/* Connections Selector */}
+                  <Select
+                    value={selectedConnection}
+                    onValueChange={(value) => handleConnectionChange(index, value)}
+                  >
+                    <SelectTrigger className="w-full bg-muted/50 border-border/50">
+                      <SelectValue>{getConnectionLabel(selectedConnection)}</SelectValue>
+                    </SelectTrigger>
+                    <SelectContent>
+                      {connections.map((connection) => (
+                        <SelectItem key={connection.value} value={connection.value}>
+                          {connection.label}
                         </SelectItem>
                       ))}
                     </SelectContent>
