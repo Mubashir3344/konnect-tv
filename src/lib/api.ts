@@ -1,7 +1,7 @@
 import { MediaItem } from '@/types/media';
 
 // IMPORTANT: Replace this with your actual Hostinger domain
-const API_BASE_URL = 'https://your-domain.com/api';
+const API_BASE_URL = 'https://streamflux.shop/api';
 
 // Helper function for API calls
 async function apiCall<T>(
