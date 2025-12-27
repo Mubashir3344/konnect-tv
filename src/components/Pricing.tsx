@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { Check, Zap, MessageCircle } from "lucide-react";
+import { Check, Zap } from "lucide-react";
+import WhatsAppIcon from "@/components/icons/WhatsAppIcon";
 import {
   Select,
   SelectContent,
@@ -251,7 +252,7 @@ const Pricing = () => {
                     className="w-full"
                     size="lg"
                   >
-                    <MessageCircle className="w-4 h-4" />
+                    <WhatsAppIcon className="w-4 h-4" />
                     Get Started
                   </Button>
                 </a>
