@@ -18,15 +18,19 @@ const ContentRow = ({ title, icon, items, type, autoSlide = true }: ContentRowPr
   const [isHovered, setIsHovered] = useState(false);
   const animationRef = useRef<number>();
   const scrollSpeedRef = useRef(0.5);
+  const baseSpeed = 0.5;
+  const boostSpeed = 4;
+  const boostDurationRef = useRef(0);
+  const boostDirectionRef = useRef<'left' | 'right'>('right');
 
   // Duplicate items for infinite loop
   const loopedItems = items.length > 0 ? [...items, ...items, ...items] : [];
 
   const scroll = (direction: 'left' | 'right') => {
-    if (scrollRef.current) {
-      const scrollAmount = direction === 'left' ? -320 : 320;
-      scrollRef.current.scrollBy({ left: scrollAmount, behavior: 'smooth' });
-    }
+    // Boost speed in the clicked direction for smooth acceleration
+    boostDirectionRef.current = direction;
+    boostDurationRef.current = 60; // frames of boosted speed
+    scrollSpeedRef.current = direction === 'right' ? boostSpeed : -boostSpeed;
   };
 
   // Intersection Observer
@@ -46,6 +50,15 @@ const ContentRow = ({ title, icon, items, type, autoSlide = true }: ContentRowPr
 
     const animate = () => {
       if (scrollRef.current) {
+        // Handle boost duration countdown
+        if (boostDurationRef.current > 0) {
+          boostDurationRef.current--;
+          // Gradually return to base speed
+          if (boostDurationRef.current === 0) {
+            scrollSpeedRef.current = baseSpeed;
+          }
+        }
+        
         scrollRef.current.scrollLeft += scrollSpeedRef.current;
         
         // Reset to middle when reaching end
