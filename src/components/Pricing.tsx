@@ -3,52 +3,64 @@ import { Check, Zap, MessageCircle } from "lucide-react";
 
 const plans = [
   {
-    name: "Monthly",
-    price: "14.99",
-    period: "/month",
-    description: "Perfect for trying out our service",
+    name: "Basic",
+    description: "Essential streaming for casual viewers",
     features: [
-      "40,000+ Live Channels",
-      "80,000+ Movies & Series",
-      "HD & 4K Quality",
+      "20,000+ Live Channels",
+      "40,000+ Movies & Series",
+      "HD Quality",
       "1 Device Connection",
       "24/7 Support",
-      "7-Day Catch-Up",
     ],
     popular: false,
+    pricing: [
+      { duration: "1 month", price: "10" },
+      { duration: "3 months", price: "20" },
+      { duration: "6 months", price: "30" },
+      { duration: "12 months", price: "45", hot: true },
+      { duration: "24 months", price: "80", hot: true },
+    ],
   },
   {
-    name: "Quarterly",
-    price: "29.99",
-    period: "/3 months",
-    description: "Save 33% with quarterly billing",
+    name: "Pro",
+    description: "Enhanced experience for regular viewers",
+    features: [
+      "30,000+ Live Channels",
+      "60,000+ Movies & Series",
+      "HD & FHD Quality",
+      "2 Device Connections",
+      "24/7 Priority Support",
+      "7-Day Catch-Up",
+    ],
+    popular: true,
+    pricing: [
+      { duration: "1 month", price: "13" },
+      { duration: "3 months", price: "26" },
+      { duration: "6 months", price: "38" },
+      { duration: "12 months", price: "60", hot: true },
+      { duration: "24 months", price: "100", hot: true },
+    ],
+  },
+  {
+    name: "Ultra",
+    description: "Premium experience for power users",
     features: [
       "40,000+ Live Channels",
       "80,000+ Movies & Series",
-      "HD & 4K Quality",
-      "2 Device Connections",
-      "24/7 Priority Support",
+      "HD, FHD & 4K Quality",
+      "4 Device Connections",
+      "24/7 VIP Support",
       "14-Day Catch-Up",
       "PPV Events Included",
     ],
-    popular: true,
-  },
-  {
-    name: "Annual",
-    price: "79.99",
-    period: "/year",
-    description: "Best value - Save 55%",
-    features: [
-      "40,000+ Live Channels",
-      "80,000+ Movies & Series",
-      "HD & 4K Quality",
-      "4 Device Connections",
-      "24/7 VIP Support",
-      "30-Day Catch-Up",
-      "PPV Events Included",
-      "Adult Content Access",
-    ],
     popular: false,
+    pricing: [
+      { duration: "1 month", price: "16" },
+      { duration: "3 months", price: "32" },
+      { duration: "6 months", price: "50" },
+      { duration: "12 months", price: "80", hot: true },
+      { duration: "24 months", price: "120", hot: true },
+    ],
   },
 ];
 
@@ -67,11 +79,11 @@ const Pricing = () => {
             <span className="gradient-text"> Pricing</span>
           </h2>
           <p className="text-muted-foreground text-lg">
-            Choose the plan that fits your needs. All plans include a 24-hour free trial.
+            Choose the plan that fits your needs. 100% Guarantee with 24/7 Customer Support.
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8 max-w-5xl mx-auto">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8 max-w-6xl mx-auto">
           {plans.map((plan, index) => (
             <div
               key={index}
@@ -91,19 +103,33 @@ const Pricing = () => {
               )}
 
               <div className="text-center mb-6">
-                <h3 className="text-xl font-semibold text-foreground mb-2">
+                <h3 className="text-2xl font-bold text-foreground mb-2">
                   {plan.name}
                 </h3>
-                <p className="text-muted-foreground text-sm mb-4">
+                <p className="text-muted-foreground text-sm">
                   {plan.description}
                 </p>
-                <div className="flex items-baseline justify-center gap-1">
-                  <span className="text-lg text-muted-foreground">$</span>
-                  <span className="text-4xl lg:text-5xl font-bold text-foreground">
-                    {plan.price}
-                  </span>
-                  <span className="text-muted-foreground">{plan.period}</span>
-                </div>
+              </div>
+
+              {/* Pricing Grid */}
+              <div className="space-y-2 mb-6">
+                {plan.pricing.map((tier, tierIndex) => (
+                  <div
+                    key={tierIndex}
+                    className={`flex items-center justify-between p-3 rounded-lg ${
+                      tier.hot
+                        ? "bg-primary/10 border border-primary/30"
+                        : "bg-muted/30"
+                    }`}
+                  >
+                    <span className="text-sm text-muted-foreground flex items-center gap-2">
+                      {tier.hot && <span className="text-orange-400">🔥</span>}
+                      {!tier.hot && <span>🎉</span>}
+                      {tier.duration}
+                    </span>
+                    <span className="text-lg font-bold text-foreground">${tier.price}</span>
+                  </div>
+                ))}
               </div>
 
               <ul className="space-y-3 mb-8">
