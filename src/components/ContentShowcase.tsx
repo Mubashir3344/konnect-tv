@@ -1,4 +1,4 @@
-import { useRef, useEffect, useState } from 'react';
+import { useRef, useEffect, useState, useCallback } from 'react';
 import { ChevronLeft, ChevronRight, Play, Star, Calendar, Clock, Tv, Trophy, Radio } from 'lucide-react';
 import { MediaItem } from '@/types/media';
 import { getMediaItems } from '@/lib/mediaStorage';
@@ -13,7 +13,12 @@ interface ContentRowProps {
 
 const ContentRow = ({ title, icon, items, type, autoSlide = true }: ContentRowProps) => {
   const scrollRef = useRef<HTMLDivElement>(null);
-  const [isPaused, setIsPaused] = useState(false);
+  const containerRef = useRef<HTMLDivElement>(null);
+  const [isVisible, setIsVisible] = useState(false);
+  const [isHovered, setIsHovered] = useState(false);
+
+  // Duplicate items for infinite loop effect
+  const loopedItems = items.length > 0 ? [...items, ...items, ...items] : [];
 
   const scroll = (direction: 'left' | 'right') => {
     if (scrollRef.current) {
@@ -22,29 +27,63 @@ const ContentRow = ({ title, icon, items, type, autoSlide = true }: ContentRowPr
     }
   };
 
-  // Auto-scroll effect
+  // Handle infinite loop scroll
+  const handleScroll = useCallback(() => {
+    if (!scrollRef.current || items.length === 0) return;
+    
+    const { scrollLeft, scrollWidth, clientWidth } = scrollRef.current;
+    const itemWidth = scrollWidth / 3; // Since we have 3 copies
+    
+    // If scrolled to the end, jump to the middle set
+    if (scrollLeft >= itemWidth * 2 - 10) {
+      scrollRef.current.scrollLeft = itemWidth;
+    }
+    // If scrolled to the beginning, jump to the middle set
+    else if (scrollLeft <= 10) {
+      scrollRef.current.scrollLeft = itemWidth;
+    }
+  }, [items.length]);
+
+  // Initialize scroll position to middle set
   useEffect(() => {
-    if (!autoSlide || isPaused || items.length <= 3) return;
+    if (scrollRef.current && items.length > 0) {
+      const itemWidth = scrollRef.current.scrollWidth / 3;
+      scrollRef.current.scrollLeft = itemWidth;
+    }
+  }, [items.length]);
+
+  // Intersection Observer - only auto-slide when in viewport
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        setIsVisible(entry.isIntersecting);
+      },
+      { threshold: 0.3 }
+    );
+
+    if (containerRef.current) {
+      observer.observe(containerRef.current);
+    }
+
+    return () => observer.disconnect();
+  }, []);
+
+  // Auto-scroll effect - only when visible OR hovered
+  useEffect(() => {
+    if (!autoSlide || items.length <= 3) return;
+    if (!isVisible && !isHovered) return;
 
     const interval = setInterval(() => {
       if (scrollRef.current) {
-        const { scrollLeft, scrollWidth, clientWidth } = scrollRef.current;
-        const maxScroll = scrollWidth - clientWidth;
-        
-        if (scrollLeft >= maxScroll - 10) {
-          // Reset to start smoothly
-          scrollRef.current.scrollTo({ left: 0, behavior: 'smooth' });
-        } else {
-          scrollRef.current.scrollBy({ left: 300, behavior: 'smooth' });
-        }
+        scrollRef.current.scrollBy({ left: 300, behavior: 'smooth' });
       }
     }, 3000);
 
     return () => clearInterval(interval);
-  }, [autoSlide, isPaused, items.length]);
+  }, [autoSlide, isVisible, isHovered, items.length]);
 
   return (
-    <div className="mb-12">
+    <div ref={containerRef} className="mb-12">
       {/* Section Header */}
       <div className="flex items-center justify-between mb-6">
         <div className="flex items-center gap-3">
@@ -77,12 +116,13 @@ const ContentRow = ({ title, icon, items, type, autoSlide = true }: ContentRowPr
         ref={scrollRef}
         className="flex gap-4 overflow-x-auto scrollbar-hide pb-4 -mx-4 px-4"
         style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
-        onMouseEnter={() => setIsPaused(true)}
-        onMouseLeave={() => setIsPaused(false)}
+        onMouseEnter={() => setIsHovered(true)}
+        onMouseLeave={() => setIsHovered(false)}
+        onScroll={handleScroll}
       >
-        {items.map((item) => (
+        {loopedItems.map((item, index) => (
           <div
-            key={item.id}
+            key={`${item.id}-${index}`}
             className="group flex-shrink-0 w-64 sm:w-72 md:w-80"
           >
             {/* Card */}
