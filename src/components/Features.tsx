@@ -4,12 +4,12 @@ const features = [
   {
     icon: Tv,
     title: "Live TV Channels",
-    description: "Access 40,000+ live channels from every corner of the globe including sports, news, and entertainment.",
+    description: "Access 50,000+ live channels from every corner of the globe including sports, news, and entertainment.",
   },
   {
     icon: Clapperboard,
     title: "Movies & Series",
-    description: "Enjoy our massive library of 80,000+ movies and TV series, updated daily with the latest releases.",
+    description: "Enjoy our massive library of 200,000+ movies and TV series, updated daily with the latest releases.",
   },
   {
     icon: Trophy,
