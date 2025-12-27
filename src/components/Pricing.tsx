@@ -171,18 +171,12 @@ const Pricing = () => {
                     onValueChange={(value) => handleDurationChange(index, value)}
                   >
                     <SelectTrigger className="w-full bg-muted/50 border-border/50">
-                      <SelectValue>
-                        <span className="flex items-center gap-2">
-                          {isHotDuration(selectedDuration) ? "🔥" : "🎉"} {getDurationLabel(selectedDuration)}
-                        </span>
-                      </SelectValue>
+                      <SelectValue>{getDurationLabel(selectedDuration)}</SelectValue>
                     </SelectTrigger>
                     <SelectContent>
                       {durations.map((duration) => (
                         <SelectItem key={duration.value} value={duration.value}>
-                          <span className="flex items-center gap-2">
-                            {duration.hot ? "🔥" : "🎉"} {duration.label} - ${plan.pricing[duration.value as keyof typeof plan.pricing]}
-                          </span>
+                          {duration.label} - ${plan.pricing[duration.value as keyof typeof plan.pricing]}
                         </SelectItem>
                       ))}
                     </SelectContent>
