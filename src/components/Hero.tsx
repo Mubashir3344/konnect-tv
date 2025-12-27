@@ -17,7 +17,7 @@ const Hero = () => {
           <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full glass-card mb-8 animate-fade-up">
             <Zap className="w-4 h-4 text-primary" />
             <span className="text-sm text-muted-foreground">
-              Premium Streaming Service • 40,000+ Channels
+              Premium Streaming Service • 50,000+ Channels
             </span>
           </div>
 
@@ -55,14 +55,14 @@ const Hero = () => {
               <div className="flex items-center justify-center w-12 h-12 mx-auto mb-3 rounded-xl bg-secondary">
                 <Globe className="w-6 h-6 text-primary" />
               </div>
-              <p className="text-2xl font-bold text-foreground">40K+</p>
+              <p className="text-2xl font-bold text-foreground">50K+</p>
               <p className="text-sm text-muted-foreground">Live Channels</p>
             </div>
             <div className="text-center">
               <div className="flex items-center justify-center w-12 h-12 mx-auto mb-3 rounded-xl bg-secondary">
                 <Play className="w-6 h-6 text-primary" />
               </div>
-              <p className="text-2xl font-bold text-foreground">80K+</p>
+              <p className="text-2xl font-bold text-foreground">200K+</p>
               <p className="text-sm text-muted-foreground">Movies & Shows</p>
             </div>
             <div className="text-center">

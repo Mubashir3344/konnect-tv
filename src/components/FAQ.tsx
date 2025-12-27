@@ -16,7 +16,7 @@ const faqs = [
   },
   {
     question: "Can I use the service on multiple devices?",
-    answer: "Yes! Depending on your subscription plan, you can use our service on 1-4 devices simultaneously. Each plan clearly states the number of connections included.",
+    answer: "Yes! Depending on your subscription plan, you can use our service on up to 5 devices simultaneously. Each plan clearly states the number of connections included.",
   },
   {
     question: "Do you offer a free trial?",
@@ -24,7 +24,7 @@ const faqs = [
   },
   {
     question: "What channels are included?",
-    answer: "We offer 40,000+ live channels from around the world, including sports, news, entertainment, movies, kids content, and international channels. We also provide 80,000+ movies and TV series on demand.",
+    answer: "We offer 50,000+ live channels from around the world, including sports, news, entertainment, movies, kids content, and international channels. We also provide 200,000+ movies and TV series on demand.",
   },
   {
     question: "How do I set up the service?",
