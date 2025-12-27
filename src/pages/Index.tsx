@@ -14,11 +14,11 @@ const Index = () => {
   const location = useLocation();
 
   useEffect(() => {
-    // Only scroll to hash if explicitly navigating to a section
-    // Otherwise, scroll to top on initial page load
-    if (!location.hash) {
-      window.scrollTo(0, 0);
+    // Always scroll to top on initial page load and clear hash
+    if (location.hash) {
+      window.history.replaceState(null, '', '/');
     }
+    window.scrollTo(0, 0);
   }, []);
 
   return (

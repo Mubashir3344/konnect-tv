@@ -17,29 +17,33 @@ const ContentRow = ({ title, icon, items, type, autoSlide = true }: ContentRowPr
   const [isVisible, setIsVisible] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
 
-  // Duplicate items for infinite loop effect (5 copies for smoother looping)
+  // Duplicate items for infinite loop effect
   const loopedItems = items.length > 0 ? [...items, ...items, ...items, ...items, ...items] : [];
 
   const scroll = (direction: 'left' | 'right') => {
     if (scrollRef.current) {
       const scrollAmount = direction === 'left' ? -400 : 400;
       scrollRef.current.scrollBy({ left: scrollAmount, behavior: 'smooth' });
+      
+      // Check boundaries after scroll animation completes
+      setTimeout(() => handleScrollReset(), 350);
     }
   };
 
-  // Handle infinite loop scroll
-  const handleScroll = useCallback(() => {
+  // Handle infinite loop scroll reset
+  const handleScrollReset = useCallback(() => {
     if (!scrollRef.current || items.length === 0) return;
     
-    const { scrollLeft, scrollWidth } = scrollRef.current;
-    const singleSetWidth = scrollWidth / 5; // Since we have 5 copies
+    const { scrollLeft, scrollWidth, clientWidth } = scrollRef.current;
+    const singleSetWidth = scrollWidth / 5;
+    const maxScroll = scrollWidth - clientWidth;
     
-    // If scrolled too far right, jump back
-    if (scrollLeft >= singleSetWidth * 4) {
+    // If near the end (scrolled too far right), jump back to middle
+    if (scrollLeft >= maxScroll - 50 || scrollLeft >= singleSetWidth * 3.5) {
       scrollRef.current.scrollLeft = singleSetWidth * 2;
     }
-    // If scrolled too far left, jump forward
-    else if (scrollLeft <= singleSetWidth * 0.5) {
+    // If near the beginning (scrolled too far left), jump to middle
+    else if (scrollLeft <= 50 || scrollLeft <= singleSetWidth * 0.5) {
       scrollRef.current.scrollLeft = singleSetWidth * 2;
     }
   }, [items.length]);
@@ -47,7 +51,6 @@ const ContentRow = ({ title, icon, items, type, autoSlide = true }: ContentRowPr
   // Initialize scroll position to middle set
   useEffect(() => {
     if (scrollRef.current && items.length > 0) {
-      // Set initial scroll to the middle
       const singleSetWidth = scrollRef.current.scrollWidth / 5;
       scrollRef.current.scrollLeft = singleSetWidth * 2;
     }
@@ -116,7 +119,7 @@ const ContentRow = ({ title, icon, items, type, autoSlide = true }: ContentRowPr
         style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
-        onScroll={handleScroll}
+        onScroll={handleScrollReset}
       >
         {loopedItems.map((item, index) => (
           <div
