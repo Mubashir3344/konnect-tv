@@ -141,6 +141,26 @@ const Pricing = () => {
     return Math.round(basePrice * multiplier);
   };
 
+  const calculateOriginalPrice = (planIndex: number, duration: string, connectionCount: string) => {
+    // Calculate what the price would be if paying monthly for the same period
+    const monthlyPrice = plans[planIndex].pricing["1"];
+    const months = duration === "lifetime" ? 60 : parseInt(duration);
+    const multiplier = connectionMultipliers[connectionCount] || 1;
+    return Math.round(monthlyPrice * months * multiplier);
+  };
+
+  const getDiscountPercentage = (duration: string) => {
+    const discounts: Record<string, number> = {
+      "1": 0,
+      "3": 33,
+      "6": 50,
+      "12": 63,
+      "24": 67,
+      "lifetime": 87,
+    };
+    return discounts[duration] || 0;
+  };
+
   return (
     <section id="pricing" className="py-24 relative">
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_bottom,_hsl(199_89%_48%_/_0.06)_0%,_transparent_60%)]" />
@@ -163,6 +183,10 @@ const Pricing = () => {
             const selectedConnection = selectedConnections[index] || "1";
             const basePrice = plan.pricing[selectedDuration as keyof typeof plan.pricing];
             const currentPrice = calculatePrice(basePrice, selectedConnection);
+
+            const originalPrice = calculateOriginalPrice(index, selectedDuration, selectedConnection);
+            const discountPercentage = getDiscountPercentage(selectedDuration);
+            const showDiscount = discountPercentage > 0;
 
             return (
               <div
@@ -190,12 +214,28 @@ const Pricing = () => {
                     {plan.description}
                   </p>
 
+                  {/* Discount Badge */}
+                  {showDiscount && (
+                    <div className="mb-3">
+                      <span className="inline-flex items-center px-3 py-1 rounded-full bg-green-500/20 text-green-400 text-sm font-semibold border border-green-500/30">
+                        Save {discountPercentage}%
+                      </span>
+                    </div>
+                  )}
+
                   {/* Price Display */}
-                  <div className="flex items-baseline justify-center gap-1 mb-4">
-                    <span className="text-2xl text-muted-foreground">$</span>
-                    <span className="text-5xl lg:text-6xl font-bold text-foreground transition-all duration-300">
-                      {currentPrice}
-                    </span>
+                  <div className="flex flex-col items-center justify-center gap-1 mb-4">
+                    {showDiscount && (
+                      <span className="text-lg text-muted-foreground line-through">
+                        ${originalPrice}
+                      </span>
+                    )}
+                    <div className="flex items-baseline gap-1">
+                      <span className="text-2xl text-muted-foreground">$</span>
+                      <span className="text-5xl lg:text-6xl font-bold text-foreground transition-all duration-300">
+                        {currentPrice}
+                      </span>
+                    </div>
                   </div>
 
                   {/* Duration Selector */}
@@ -214,6 +254,7 @@ const Pricing = () => {
                       ))}
                     </SelectContent>
                   </Select>
+
 
                   {/* Connections Selector */}
                   <Select
