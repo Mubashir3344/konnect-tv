@@ -1,0 +1,26 @@
+# Enable URL rewriting
+RewriteEngine On
+
+# Allow direct access to existing files and directories
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+
+# Route API requests
+RewriteRule ^api/media/?$ api/media.php [L,QSA]
+RewriteRule ^api/media/([0-9]+)/?$ api/media.php?id=$1 [L,QSA]
+RewriteRule ^api/upload/?$ api/upload.php [L,QSA]
+
+# Security headers
+<IfModule mod_headers.c>
+    Header always set X-Content-Type-Options "nosniff"
+    Header always set X-Frame-Options "DENY"
+</IfModule>
+
+# Prevent directory listing
+Options -Indexes
+
+# Protect config file
+<Files "config.php">
+    Order Allow,Deny
+    Deny from all
+</Files>

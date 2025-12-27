@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { MediaItem } from '@/types/media';
-import { getMediaItems, addMediaItem, updateMediaItem, deleteMediaItem } from '@/lib/mediaStorage';
+import { mediaApi } from '@/lib/api';
 import MediaCard from '@/components/admin/MediaCard';
 import MediaFormModal from '@/components/admin/MediaFormModal';
 import { Button } from '@/components/ui/button';
@@ -15,7 +15,8 @@ import {
   Clapperboard,
   Search,
   LayoutGrid,
-  List
+  List,
+  Loader2
 } from 'lucide-react';
 import { toast } from 'sonner';
 
@@ -28,13 +29,23 @@ const AdminDashboard = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingItem, setEditingItem] = useState<MediaItem | null>(null);
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     loadMedia();
   }, []);
 
-  const loadMedia = () => {
-    setMediaItems(getMediaItems());
+  const loadMedia = async () => {
+    setIsLoading(true);
+    try {
+      const items = await mediaApi.getAll();
+      setMediaItems(items);
+    } catch (error) {
+      console.error('Failed to load media:', error);
+      toast.error('Failed to load media. Check your API connection.');
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const tabs = [
@@ -51,24 +62,39 @@ const AdminDashboard = () => {
     return matchesTab && matchesSearch;
   });
 
-  const handleAdd = (data: Omit<MediaItem, 'id'>) => {
-    addMediaItem(data);
-    loadMedia();
-    toast.success('Media added successfully!');
+  const handleAdd = async (data: Omit<MediaItem, 'id'>) => {
+    try {
+      await mediaApi.create(data);
+      await loadMedia();
+      toast.success('Media added successfully!');
+    } catch (error) {
+      console.error('Failed to add media:', error);
+      toast.error('Failed to add media');
+    }
   };
 
-  const handleEdit = (data: MediaItem) => {
-    updateMediaItem(data.id, data);
-    loadMedia();
-    setEditingItem(null);
-    toast.success('Media updated successfully!');
+  const handleEdit = async (data: MediaItem) => {
+    try {
+      await mediaApi.update(data.id, data);
+      await loadMedia();
+      setEditingItem(null);
+      toast.success('Media updated successfully!');
+    } catch (error) {
+      console.error('Failed to update media:', error);
+      toast.error('Failed to update media');
+    }
   };
 
-  const handleDelete = (id: string) => {
+  const handleDelete = async (id: string) => {
     if (confirm('Are you sure you want to delete this item?')) {
-      deleteMediaItem(id);
-      loadMedia();
-      toast.success('Media deleted successfully!');
+      try {
+        await mediaApi.delete(id);
+        await loadMedia();
+        toast.success('Media deleted successfully!');
+      } catch (error) {
+        console.error('Failed to delete media:', error);
+        toast.error('Failed to delete media');
+      }
     }
   };
 
@@ -186,7 +212,11 @@ const AdminDashboard = () => {
         </div>
 
         {/* Media Grid */}
-        {filteredItems.length > 0 ? (
+        {isLoading ? (
+          <div className="flex items-center justify-center py-20">
+            <Loader2 className="w-8 h-8 animate-spin text-primary" />
+          </div>
+        ) : filteredItems.length > 0 ? (
           <div className={
             viewMode === 'grid' 
               ? 'grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6'
