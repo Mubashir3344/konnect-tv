@@ -1,4 +1,4 @@
-import { MessageCircle } from 'lucide-react';
+import WhatsAppIcon from "@/components/icons/WhatsAppIcon";
 
 const WhatsAppButton = () => {
   const whatsappUrl = "https://wa.me/19177304481";
@@ -17,7 +17,7 @@ const WhatsAppButton = () => {
         
         {/* Button */}
         <div className="relative w-14 h-14 rounded-full bg-green-500 flex items-center justify-center shadow-lg shadow-green-500/30 group-hover:scale-110 group-hover:shadow-green-500/50 transition-all duration-300">
-          <MessageCircle className="w-7 h-7 text-white fill-white" />
+          <WhatsAppIcon className="w-7 h-7 text-white" />
         </div>
 
         {/* Tooltip */}
