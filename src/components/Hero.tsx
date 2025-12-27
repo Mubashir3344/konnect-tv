@@ -43,10 +43,12 @@ const Hero = () => {
                 Start Free Trial
               </Button>
             </a>
-            <Button variant="glass" size="xl" className="w-full sm:w-auto">
-              <Play className="w-5 h-5" />
-              View Channels
-            </Button>
+            <a href="#pricing" className="w-full sm:w-auto">
+              <Button variant="glass" size="xl" className="w-full">
+                <Play className="w-5 h-5" />
+                Plans Checkout
+              </Button>
+            </a>
           </div>
 
           {/* Trust Badges */}
