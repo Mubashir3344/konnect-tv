@@ -12,102 +12,104 @@ interface ContentRowProps {
 }
 
 const ContentRow = ({ title, icon, items, type, autoSlide = true }: ContentRowProps) => {
+  const scrollRef = useRef<HTMLDivElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
-  const [centerIndex, setCenterIndex] = useState(0);
   const [isVisible, setIsVisible] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
+  const animationRef = useRef<number>();
+  const scrollSpeedRef = useRef(0.5);
 
-  const visibleCount = 5; // Number of items visible at once
+  // Duplicate items for infinite loop
+  const loopedItems = items.length > 0 ? [...items, ...items, ...items] : [];
 
-  const slide = (direction: 'left' | 'right') => {
-    if (items.length === 0) return;
-    setCenterIndex(prev => {
-      if (direction === 'right') {
-        return (prev + 1) % items.length;
-      } else {
-        return (prev - 1 + items.length) % items.length;
-      }
-    });
+  const scroll = (direction: 'left' | 'right') => {
+    if (scrollRef.current) {
+      const scrollAmount = direction === 'left' ? -320 : 320;
+      scrollRef.current.scrollBy({ left: scrollAmount, behavior: 'smooth' });
+    }
   };
 
-  // Intersection Observer - only auto-slide when in viewport
+  // Intersection Observer
   useEffect(() => {
     const observer = new IntersectionObserver(
-      ([entry]) => {
-        setIsVisible(entry.isIntersecting);
-      },
+      ([entry]) => setIsVisible(entry.isIntersecting),
       { threshold: 0.3 }
     );
-
-    if (containerRef.current) {
-      observer.observe(containerRef.current);
-    }
-
+    if (containerRef.current) observer.observe(containerRef.current);
     return () => observer.disconnect();
   }, []);
 
-  // Auto-scroll effect - only when visible OR hovered
+  // Continuous smooth scrolling animation
   useEffect(() => {
-    if (!autoSlide || items.length <= 3) return;
+    if (!autoSlide || items.length <= 2) return;
     if (!isVisible && !isHovered) return;
 
-    const interval = setInterval(() => {
-      slide('right');
-    }, 3000);
+    const animate = () => {
+      if (scrollRef.current) {
+        scrollRef.current.scrollLeft += scrollSpeedRef.current;
+        
+        // Reset to middle when reaching end
+        const { scrollLeft, scrollWidth, clientWidth } = scrollRef.current;
+        const singleSetWidth = scrollWidth / 3;
+        
+        if (scrollLeft >= singleSetWidth * 2) {
+          scrollRef.current.scrollLeft = singleSetWidth;
+        } else if (scrollLeft <= 0) {
+          scrollRef.current.scrollLeft = singleSetWidth;
+        }
+      }
+      animationRef.current = requestAnimationFrame(animate);
+    };
 
-    return () => clearInterval(interval);
+    animationRef.current = requestAnimationFrame(animate);
+    return () => {
+      if (animationRef.current) cancelAnimationFrame(animationRef.current);
+    };
   }, [autoSlide, isVisible, isHovered, items.length]);
 
-  // Get visible items centered around centerIndex
-  const getVisibleItems = () => {
-    if (items.length === 0) return [];
-    
-    const result = [];
-    const half = Math.floor(visibleCount / 2);
-    
-    for (let i = -half; i <= half; i++) {
-      const index = (centerIndex + i + items.length) % items.length;
-      result.push({
-        item: items[index],
-        position: i, // -2, -1, 0, 1, 2 (0 is center)
-        originalIndex: index,
-      });
+  // Initialize scroll position
+  useEffect(() => {
+    if (scrollRef.current && items.length > 0) {
+      const singleSetWidth = scrollRef.current.scrollWidth / 3;
+      scrollRef.current.scrollLeft = singleSetWidth;
     }
-    return result;
+  }, [items.length]);
+
+  // Calculate scale based on distance from center
+  const getItemScale = (element: HTMLDivElement | null, containerElement: HTMLDivElement | null) => {
+    if (!element || !containerElement) return { scale: 0.75, opacity: 0.5 };
+    
+    const containerRect = containerElement.getBoundingClientRect();
+    const itemRect = element.getBoundingClientRect();
+    const containerCenter = containerRect.left + containerRect.width / 2;
+    const itemCenter = itemRect.left + itemRect.width / 2;
+    const distance = Math.abs(containerCenter - itemCenter);
+    const maxDistance = containerRect.width / 2;
+    
+    // Calculate scale: 1 at center, 0.7 at edges
+    const normalizedDistance = Math.min(distance / maxDistance, 1);
+    const scale = 1 - (normalizedDistance * 0.3);
+    const opacity = 1 - (normalizedDistance * 0.5);
+    
+    return { scale, opacity };
   };
 
-  const getItemStyles = (position: number) => {
-    const absPosition = Math.abs(position);
-    
-    // Scale: center = 1, sides decrease
-    const scale = position === 0 ? 1 : position === 1 || position === -1 ? 0.85 : 0.7;
-    
-    // Opacity: center = 1, sides decrease
-    const opacity = position === 0 ? 1 : position === 1 || position === -1 ? 0.7 : 0.5;
-    
-    // Z-index: center highest
-    const zIndex = 10 - absPosition;
-    
-    // Translate X for positioning
-    const translateX = position * 85; // % offset
-    
-    // Blur for side items
-    const blur = absPosition > 1 ? 1 : 0;
-    
-    return {
-      transform: `translateX(${translateX}%) scale(${scale})`,
-      opacity,
-      zIndex,
-      filter: blur > 0 ? `blur(${blur}px)` : 'none',
-    };
-  };
-
-  const visibleItems = getVisibleItems();
+  const [, forceUpdate] = useState(0);
+  
+  // Force re-render on scroll to update scales
+  useEffect(() => {
+    const handleScroll = () => forceUpdate(n => n + 1);
+    const scrollEl = scrollRef.current;
+    if (scrollEl) {
+      scrollEl.addEventListener('scroll', handleScroll, { passive: true });
+      return () => scrollEl.removeEventListener('scroll', handleScroll);
+    }
+  }, []);
 
   return (
-    <div ref={containerRef} className="mb-16">
+    <div ref={containerRef} className="mb-14">
       {/* Section Header */}
-      <div className="flex items-center justify-between mb-8">
+      <div className="flex items-center justify-between mb-6">
         <div className="flex items-center gap-3">
           <div className="w-10 h-10 rounded-xl bg-secondary flex items-center justify-center">
             {icon}
@@ -116,13 +118,13 @@ const ContentRow = ({ title, icon, items, type, autoSlide = true }: ContentRowPr
         </div>
         <div className="flex items-center gap-2">
           <button
-            onClick={() => slide('left')}
+            onClick={() => scroll('left')}
             className="p-2 rounded-full bg-secondary hover:bg-primary/20 transition-colors"
           >
             <ChevronLeft className="w-5 h-5 text-foreground" />
           </button>
           <button
-            onClick={() => slide('right')}
+            onClick={() => scroll('right')}
             className="p-2 rounded-full bg-secondary hover:bg-primary/20 transition-colors"
           >
             <ChevronRight className="w-5 h-5 text-foreground" />
@@ -130,70 +132,79 @@ const ContentRow = ({ title, icon, items, type, autoSlide = true }: ContentRowPr
         </div>
       </div>
 
-      {/* Center-focused Carousel */}
-      <div 
-        className="relative h-[320px] md:h-[380px] overflow-hidden"
-        onMouseEnter={() => setIsHovered(true)}
-        onMouseLeave={() => setIsHovered(false)}
-      >
-        {/* Gradient fade edges */}
-        <div className="absolute left-0 top-0 bottom-0 w-24 bg-gradient-to-r from-background to-transparent z-20 pointer-events-none" />
-        <div className="absolute right-0 top-0 bottom-0 w-24 bg-gradient-to-l from-background to-transparent z-20 pointer-events-none" />
+      {/* Scrollable Row with Center Focus */}
+      <div className="relative">
+        {/* Edge gradients */}
+        <div className="absolute left-0 top-0 bottom-0 w-20 bg-gradient-to-r from-background via-background/80 to-transparent z-10 pointer-events-none" />
+        <div className="absolute right-0 top-0 bottom-0 w-20 bg-gradient-to-l from-background via-background/80 to-transparent z-10 pointer-events-none" />
         
-        <div className="absolute inset-0 flex items-center justify-center">
-          {visibleItems.map(({ item, position, originalIndex }) => (
-            <div
-              key={`${item.id}-${originalIndex}`}
-              className="absolute w-64 sm:w-72 md:w-80 transition-all duration-500 ease-out cursor-pointer"
-              style={getItemStyles(position)}
-              onClick={() => position !== 0 && setCenterIndex(originalIndex)}
-            >
-              {/* Card */}
-              <div className={`relative rounded-xl overflow-hidden glass-card transition-all duration-300 ${position === 0 ? 'ring-2 ring-primary/50 shadow-2xl shadow-primary/20' : ''}`}>
-                {/* Thumbnail */}
-                <div className="relative overflow-hidden aspect-video">
-                  <img
-                    src={item.thumbnail}
-                    alt={item.title}
-                    className="w-full h-full object-cover"
-                    onError={(e) => {
-                      (e.target as HTMLImageElement).src = '/placeholder.svg';
-                    }}
-                  />
+        <div
+          ref={scrollRef}
+          className="flex gap-5 overflow-x-auto scrollbar-hide py-6 px-8"
+          style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
+          onMouseEnter={() => {
+            setIsHovered(true);
+            scrollSpeedRef.current = 0.2; // Slow down on hover
+          }}
+          onMouseLeave={() => {
+            setIsHovered(false);
+            scrollSpeedRef.current = 0.5;
+          }}
+        >
+          {loopedItems.map((item, index) => {
+            const itemRef = useRef<HTMLDivElement>(null);
+            const { scale, opacity } = getItemScale(itemRef.current, containerRef.current);
+            const isCenter = scale > 0.9;
+            
+            return (
+              <div
+                key={`${item.id}-${index}`}
+                ref={itemRef}
+                className="flex-shrink-0 transition-all duration-150 ease-out"
+                style={{
+                  width: '280px',
+                  transform: `scale(${scale})`,
+                  opacity: Math.max(opacity, 0.4),
+                }}
+              >
+                <div className={`relative rounded-xl overflow-hidden glass-card transition-all duration-200 ${isCenter ? 'ring-2 ring-primary/40 shadow-xl shadow-primary/10' : ''}`}>
+                  {/* Thumbnail */}
+                  <div className="relative overflow-hidden aspect-video">
+                    <img
+                      src={item.thumbnail}
+                      alt={item.title}
+                      className="w-full h-full object-cover"
+                      onError={(e) => {
+                        (e.target as HTMLImageElement).src = '/placeholder.svg';
+                      }}
+                    />
 
-                  {/* Live Badge */}
-                  {item.isLive && (
-                    <div className="absolute top-3 left-3 flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-red-500 text-foreground text-xs font-semibold">
-                      <span className="w-2 h-2 rounded-full bg-foreground animate-pulse" />
-                      LIVE
-                    </div>
-                  )}
+                    {/* Live Badge */}
+                    {item.isLive && (
+                      <div className="absolute top-3 left-3 flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-red-500 text-foreground text-xs font-semibold">
+                        <span className="w-2 h-2 rounded-full bg-foreground animate-pulse" />
+                        LIVE
+                      </div>
+                    )}
 
-                  {/* Rating Badge (for movies/series) */}
-                  {item.rating && (
-                    <div className="absolute top-3 right-3 flex items-center gap-1 px-2 py-1 rounded-full bg-background/80 backdrop-blur-sm text-xs font-semibold">
-                      <Star className="w-3 h-3 text-yellow-500 fill-yellow-500" />
-                      {item.rating}
-                    </div>
-                  )}
+                    {/* Rating Badge */}
+                    {item.rating && (
+                      <div className="absolute top-3 right-3 flex items-center gap-1 px-2 py-1 rounded-full bg-background/80 backdrop-blur-sm text-xs font-semibold">
+                        <Star className="w-3 h-3 text-yellow-500 fill-yellow-500" />
+                        {item.rating}
+                      </div>
+                    )}
 
-                  {/* Center item highlight glow */}
-                  {position === 0 && (
-                    <div className="absolute inset-0 bg-gradient-to-t from-primary/10 to-transparent pointer-events-none" />
-                  )}
+                    {/* Gradient Overlay */}
+                    <div className="absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-card to-transparent" />
+                  </div>
 
-                  {/* Gradient Overlay */}
-                  <div className="absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-card to-transparent" />
-                </div>
+                  {/* Content */}
+                  <div className="p-3">
+                    <h3 className={`font-semibold text-sm truncate transition-colors ${isCenter ? 'text-primary' : 'text-foreground'}`}>
+                      {item.title}
+                    </h3>
 
-                {/* Content */}
-                <div className="p-3">
-                  <h3 className={`font-semibold text-sm md:text-base truncate transition-colors ${position === 0 ? 'text-primary' : 'text-foreground'}`}>
-                    {item.title}
-                  </h3>
-
-                  {/* Meta - only show for center item */}
-                  {position === 0 && (
                     <div className="flex flex-wrap items-center gap-2 mt-2 text-xs text-muted-foreground">
                       {item.year && (
                         <span className="flex items-center gap-1">
@@ -208,54 +219,29 @@ const ContentRow = ({ title, icon, items, type, autoSlide = true }: ContentRowPr
                         </span>
                       )}
                       {item.season && (
-                        <span>S{item.season} • {item.episode} Eps</span>
+                        <span>S{item.season}</span>
                       )}
                       {item.league && (
-                        <span className="px-2 py-0.5 rounded-full bg-green-500/20 text-green-400">
+                        <span className="px-2 py-0.5 rounded-full bg-green-500/20 text-green-400 text-[10px]">
                           {item.league}
                         </span>
                       )}
-                      {item.channelName && (
-                        <span className="px-2 py-0.5 rounded-full bg-primary/20 text-primary">
-                          {item.channelName}
-                        </span>
-                      )}
                     </div>
-                  )}
+                  </div>
                 </div>
               </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
       </div>
-
-      {/* Dot indicators */}
-      {items.length > 1 && (
-        <div className="flex justify-center gap-2 mt-6">
-          {items.slice(0, Math.min(items.length, 10)).map((_, index) => (
-            <button
-              key={index}
-              onClick={() => setCenterIndex(index)}
-              className={`w-2 h-2 rounded-full transition-all duration-300 ${
-                index === centerIndex 
-                  ? 'bg-primary w-6' 
-                  : 'bg-muted-foreground/30 hover:bg-muted-foreground/50'
-              }`}
-            />
-          ))}
-          {items.length > 10 && (
-            <span className="text-xs text-muted-foreground ml-1">+{items.length - 10}</span>
-          )}
-        </div>
-      )}
     </div>
   );
 };
+
 const ContentShowcase = () => {
   const [mediaItems, setMediaItems] = useState<MediaItem[]>([]);
 
   useEffect(() => {
-    // Load from API (same source as admin panel)
     const loadMedia = async () => {
       try {
         const items = await mediaApi.getAll();
@@ -289,7 +275,6 @@ const ContentShowcase = () => {
           </p>
         </div>
 
-        {/* Football Leagues */}
         {footballMatches.length > 0 && (
           <ContentRow
             title="Football Leagues"
@@ -299,7 +284,6 @@ const ContentShowcase = () => {
           />
         )}
 
-        {/* Sports Channels */}
         {sportsChannels.length > 0 && (
           <ContentRow
             title="Sports Channels"
@@ -309,7 +293,6 @@ const ContentShowcase = () => {
           />
         )}
 
-        {/* Movies */}
         {movies.length > 0 && (
           <ContentRow
             title="Popular Movies"
@@ -319,7 +302,6 @@ const ContentShowcase = () => {
           />
         )}
 
-        {/* TV Series */}
         {series.length > 0 && (
           <ContentRow
             title="Trending Series"
