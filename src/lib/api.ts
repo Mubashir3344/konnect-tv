@@ -28,22 +28,22 @@ async function apiCall<T>(
 export const mediaApi = {
   // Get all media items
   getAll: async (): Promise<MediaItem[]> => {
-    return apiCall<MediaItem[]>('/media');
+    return apiCall<MediaItem[]>('/media.php');
   },
 
   // Get media items by category
   getByCategory: async (category: MediaItem['category']): Promise<MediaItem[]> => {
-    return apiCall<MediaItem[]>(`/media?category=${category}`);
+    return apiCall<MediaItem[]>(`/media.php?category=${category}`);
   },
 
   // Get single media item
   getById: async (id: string): Promise<MediaItem> => {
-    return apiCall<MediaItem>(`/media?id=${id}`);
+    return apiCall<MediaItem>(`/media.php?id=${id}`);
   },
 
   // Create new media item
   create: async (item: Omit<MediaItem, 'id'>): Promise<MediaItem> => {
-    return apiCall<MediaItem>('/media', {
+    return apiCall<MediaItem>('/media.php', {
       method: 'POST',
       body: JSON.stringify(item),
     });
@@ -51,7 +51,7 @@ export const mediaApi = {
 
   // Update media item
   update: async (id: string, updates: Partial<MediaItem>): Promise<MediaItem> => {
-    return apiCall<MediaItem>(`/media?id=${id}`, {
+    return apiCall<MediaItem>(`/media.php?id=${id}`, {
       method: 'PUT',
       body: JSON.stringify(updates),
     });
@@ -59,7 +59,7 @@ export const mediaApi = {
 
   // Delete media item
   delete: async (id: string): Promise<void> => {
-    await apiCall(`/media?id=${id}`, {
+    await apiCall(`/media.php?id=${id}`, {
       method: 'DELETE',
     });
   },
@@ -72,7 +72,7 @@ export const uploadApi = {
     const formData = new FormData();
     formData.append('image', file);
 
-    const response = await fetch(`${API_BASE_URL}/upload`, {
+    const response = await fetch(`${API_BASE_URL}/upload.php`, {
       method: 'POST',
       body: formData,
     });
@@ -83,9 +83,8 @@ export const uploadApi = {
     }
 
     const data = await response.json();
-    // Return full URL for the uploaded image
     return {
-      url: `${API_BASE_URL.replace('/api', '')}/${data.url}`,
+      url: data.url,
       filename: data.filename,
     };
   },
