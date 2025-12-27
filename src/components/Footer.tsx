@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import { Tv, Mail, MessageCircle } from "lucide-react";
 
 // Social Media Icons as SVG components
@@ -125,19 +126,19 @@ const Footer = () => {
             <h4 className="font-semibold text-foreground mb-4">Legal</h4>
             <ul className="space-y-3">
               <li>
-                <a href="#" className="text-muted-foreground hover:text-primary transition-colors text-sm">
+                <Link to="/terms" className="text-muted-foreground hover:text-primary transition-colors text-sm">
                   Terms of Service
-                </a>
+                </Link>
               </li>
               <li>
-                <a href="#" className="text-muted-foreground hover:text-primary transition-colors text-sm">
+                <Link to="/privacy" className="text-muted-foreground hover:text-primary transition-colors text-sm">
                   Privacy Policy
-                </a>
+                </Link>
               </li>
               <li>
-                <a href="#" className="text-muted-foreground hover:text-primary transition-colors text-sm">
+                <Link to="/refund" className="text-muted-foreground hover:text-primary transition-colors text-sm">
                   Refund Policy
-                </a>
+                </Link>
               </li>
             </ul>
           </div>
