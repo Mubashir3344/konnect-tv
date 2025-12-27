@@ -69,7 +69,7 @@ const Footer = () => {
               <span className="text-xl font-bold text-foreground">StreamFlux</span>
             </a>
             <p className="text-muted-foreground text-sm leading-relaxed mb-6">
-              Premium IPTV service providing the best entertainment experience with 40,000+ channels worldwide.
+              Premium streaming service providing the best entertainment experience with 40,000+ channels worldwide.
             </p>
             
             {/* Social Media Icons */}

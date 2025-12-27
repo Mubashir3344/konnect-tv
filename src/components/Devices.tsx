@@ -50,13 +50,12 @@ const Devices = () => {
             Easy Setup in Minutes
           </h3>
           <p className="text-muted-foreground mb-6">
-            Our service works with all popular IPTV apps including IPTV Smarters, TiviMate, 
-            GSE Smart IPTV, and many more. We'll send you detailed setup instructions for your device.
+            Our service works with all popular streaming apps including StreamFlux App, TiviMate, 
+            and many more. We'll send you detailed setup instructions for your device.
           </p>
           <div className="flex flex-wrap items-center justify-center gap-4 text-sm text-muted-foreground">
-            <span className="px-3 py-1.5 rounded-full bg-secondary">IPTV Smarters</span>
+            <span className="px-3 py-1.5 rounded-full bg-secondary">StreamFlux App</span>
             <span className="px-3 py-1.5 rounded-full bg-secondary">TiviMate</span>
-            <span className="px-3 py-1.5 rounded-full bg-secondary">GSE Smart IPTV</span>
             <span className="px-3 py-1.5 rounded-full bg-secondary">VLC Player</span>
             <span className="px-3 py-1.5 rounded-full bg-secondary">Kodi</span>
           </div>

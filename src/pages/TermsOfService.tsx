@@ -39,7 +39,7 @@ const TermsOfService = () => {
           <section className="glass-card rounded-xl p-6">
             <h2 className="text-xl font-semibold text-foreground mb-4">2. Description of Service</h2>
             <p className="text-muted-foreground leading-relaxed mb-4">
-              StreamFlux provides Internet Protocol Television (IPTV) streaming services, including but not limited to:
+              StreamFlux provides premium streaming services, including but not limited to:
             </p>
             <ul className="list-disc list-inside text-muted-foreground space-y-2">
               <li>Access to live television channels</li>
