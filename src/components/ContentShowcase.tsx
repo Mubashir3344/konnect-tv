@@ -114,12 +114,8 @@ const ContentRow = ({ title, icon, items, type, autoSlide = true }: ContentRowPr
                   </div>
                 )}
 
-                {/* Play Overlay */}
-                <div className="absolute inset-0 bg-background/60 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
-                  <div className="w-14 h-14 rounded-full bg-primary flex items-center justify-center transform scale-75 group-hover:scale-100 transition-transform duration-300 shadow-lg shadow-primary/30">
-                    <Play className="w-6 h-6 text-primary-foreground fill-primary-foreground ml-1" />
-                  </div>
-                </div>
+                {/* Hover Overlay */}
+                <div className="absolute inset-0 bg-background/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
 
                 {/* Gradient Overlay */}
                 <div className="absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-card to-transparent" />
