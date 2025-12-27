@@ -1,52 +1,71 @@
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Check, Zap, MessageCircle } from "lucide-react";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+
+const durations = [
+  { value: "1", label: "1 Month", hot: false },
+  { value: "3", label: "3 Months", hot: false },
+  { value: "6", label: "6 Months", hot: false },
+  { value: "12", label: "12 Months", hot: true },
+  { value: "24", label: "24 Months", hot: true },
+  { value: "lifetime", label: "Lifetime", hot: true },
+];
 
 const plans = [
   {
     name: "Basic",
     description: "Essential streaming for casual viewers",
     features: [
-      "20,000+ Live Channels",
-      "40,000+ Movies & Series",
+      "22,000 Live TV Channels",
+      "85,000 Movies & TV Series",
       "HD Quality",
       "1 Device Connection",
       "24/7 Support",
     ],
     popular: false,
-    pricing: [
-      { duration: "1 month", price: "10" },
-      { duration: "3 months", price: "20" },
-      { duration: "6 months", price: "30" },
-      { duration: "12 months", price: "45", hot: true },
-      { duration: "24 months", price: "80", hot: true },
-    ],
+    pricing: {
+      "1": 10,
+      "3": 20,
+      "6": 30,
+      "12": 45,
+      "24": 80,
+      "lifetime": 400,
+    },
   },
   {
     name: "Pro",
     description: "Enhanced experience for regular viewers",
     features: [
-      "30,000+ Live Channels",
-      "60,000+ Movies & Series",
+      "30,000 Live TV Channels",
+      "110,000 Movies & TV Series",
       "HD & FHD Quality",
       "2 Device Connections",
       "24/7 Priority Support",
       "7-Day Catch-Up",
     ],
     popular: true,
-    pricing: [
-      { duration: "1 month", price: "13" },
-      { duration: "3 months", price: "26" },
-      { duration: "6 months", price: "38" },
-      { duration: "12 months", price: "60", hot: true },
-      { duration: "24 months", price: "100", hot: true },
-    ],
+    pricing: {
+      "1": 13,
+      "3": 26,
+      "6": 38,
+      "12": 60,
+      "24": 100,
+      "lifetime": 450,
+    },
   },
   {
     name: "Ultra",
     description: "Premium experience for power users",
     features: [
-      "40,000+ Live Channels",
-      "80,000+ Movies & Series",
+      "50,000 Live TV Channels",
+      "200,000 Movies & TV Series",
       "HD, FHD & 4K Quality",
       "4 Device Connections",
       "24/7 VIP Support",
@@ -54,19 +73,43 @@ const plans = [
       "PPV Events Included",
     ],
     popular: false,
-    pricing: [
-      { duration: "1 month", price: "16" },
-      { duration: "3 months", price: "32" },
-      { duration: "6 months", price: "50" },
-      { duration: "12 months", price: "80", hot: true },
-      { duration: "24 months", price: "120", hot: true },
-    ],
+    pricing: {
+      "1": 16,
+      "3": 32,
+      "6": 50,
+      "12": 80,
+      "24": 120,
+      "lifetime": 500,
+    },
   },
 ];
 
 const whatsappUrl = "https://wa.me/19177304481";
 
 const Pricing = () => {
+  const [selectedDurations, setSelectedDurations] = useState<Record<number, string>>({
+    0: "1",
+    1: "1",
+    2: "1",
+  });
+
+  const handleDurationChange = (planIndex: number, duration: string) => {
+    setSelectedDurations((prev) => ({
+      ...prev,
+      [planIndex]: duration,
+    }));
+  };
+
+  const getDurationLabel = (value: string) => {
+    const duration = durations.find((d) => d.value === value);
+    return duration?.label || "1 Month";
+  };
+
+  const isHotDuration = (value: string) => {
+    const duration = durations.find((d) => d.value === value);
+    return duration?.hot || false;
+  };
+
   return (
     <section id="pricing" className="py-24 relative">
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_bottom,_hsl(199_89%_48%_/_0.06)_0%,_transparent_60%)]" />
@@ -84,79 +127,94 @@ const Pricing = () => {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8 max-w-6xl mx-auto">
-          {plans.map((plan, index) => (
-            <div
-              key={index}
-              className={`relative p-6 lg:p-8 rounded-2xl transition-all duration-300 ${
-                plan.popular
-                  ? "glass-card border-primary/50 glow-effect scale-105"
-                  : "glass-card hover:border-primary/30"
-              }`}
-            >
-              {plan.popular && (
-                <div className="absolute -top-4 left-1/2 -translate-x-1/2">
-                  <span className="inline-flex items-center gap-1.5 px-4 py-1.5 rounded-full bg-primary text-primary-foreground text-sm font-semibold">
-                    <Zap className="w-4 h-4" />
-                    Most Popular
-                  </span>
-                </div>
-              )}
+          {plans.map((plan, index) => {
+            const selectedDuration = selectedDurations[index] || "1";
+            const currentPrice = plan.pricing[selectedDuration as keyof typeof plan.pricing];
 
-              <div className="text-center mb-6">
-                <h3 className="text-2xl font-bold text-foreground mb-2">
-                  {plan.name}
-                </h3>
-                <p className="text-muted-foreground text-sm">
-                  {plan.description}
-                </p>
-              </div>
-
-              {/* Pricing Grid */}
-              <div className="space-y-2 mb-6">
-                {plan.pricing.map((tier, tierIndex) => (
-                  <div
-                    key={tierIndex}
-                    className={`flex items-center justify-between p-3 rounded-lg ${
-                      tier.hot
-                        ? "bg-primary/10 border border-primary/30"
-                        : "bg-muted/30"
-                    }`}
-                  >
-                    <span className="text-sm text-muted-foreground flex items-center gap-2">
-                      {tier.hot && <span className="text-orange-400">🔥</span>}
-                      {!tier.hot && <span>🎉</span>}
-                      {tier.duration}
+            return (
+              <div
+                key={index}
+                className={`relative p-6 lg:p-8 rounded-2xl transition-all duration-300 ${
+                  plan.popular
+                    ? "glass-card border-primary/50 glow-effect scale-105"
+                    : "glass-card hover:border-primary/30"
+                }`}
+              >
+                {plan.popular && (
+                  <div className="absolute -top-4 left-1/2 -translate-x-1/2">
+                    <span className="inline-flex items-center gap-1.5 px-4 py-1.5 rounded-full bg-primary text-primary-foreground text-sm font-semibold">
+                      <Zap className="w-4 h-4" />
+                      Most Popular
                     </span>
-                    <span className="text-lg font-bold text-foreground">${tier.price}</span>
                   </div>
-                ))}
-              </div>
+                )}
 
-              <ul className="space-y-3 mb-8">
-                {plan.features.map((feature, featureIndex) => (
-                  <li key={featureIndex} className="flex items-center gap-3">
-                    <div className="w-5 h-5 rounded-full bg-primary/20 flex items-center justify-center flex-shrink-0">
-                      <Check className="w-3 h-3 text-primary" />
-                    </div>
-                    <span className="text-muted-foreground text-sm">
-                      {feature}
+                <div className="text-center mb-6">
+                  <h3 className="text-2xl font-bold text-foreground mb-2">
+                    {plan.name}
+                  </h3>
+                  <p className="text-muted-foreground text-sm mb-6">
+                    {plan.description}
+                  </p>
+
+                  {/* Price Display */}
+                  <div className="flex items-baseline justify-center gap-1 mb-4">
+                    <span className="text-2xl text-muted-foreground">$</span>
+                    <span className="text-5xl lg:text-6xl font-bold text-foreground transition-all duration-300">
+                      {currentPrice}
                     </span>
-                  </li>
-                ))}
-              </ul>
+                  </div>
 
-              <a href={whatsappUrl} target="_blank" rel="noopener noreferrer" className="w-full">
-                <Button
-                  variant={plan.popular ? "hero" : "glass"}
-                  className="w-full"
-                  size="lg"
-                >
-                  <MessageCircle className="w-4 h-4" />
-                  Get Started
-                </Button>
-              </a>
-            </div>
-          ))}
+                  {/* Duration Selector */}
+                  <Select
+                    value={selectedDuration}
+                    onValueChange={(value) => handleDurationChange(index, value)}
+                  >
+                    <SelectTrigger className="w-full bg-muted/50 border-border/50">
+                      <SelectValue>
+                        <span className="flex items-center gap-2">
+                          {isHotDuration(selectedDuration) ? "🔥" : "🎉"} {getDurationLabel(selectedDuration)}
+                        </span>
+                      </SelectValue>
+                    </SelectTrigger>
+                    <SelectContent>
+                      {durations.map((duration) => (
+                        <SelectItem key={duration.value} value={duration.value}>
+                          <span className="flex items-center gap-2">
+                            {duration.hot ? "🔥" : "🎉"} {duration.label} - ${plan.pricing[duration.value as keyof typeof plan.pricing]}
+                          </span>
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+
+                <ul className="space-y-3 mb-8">
+                  {plan.features.map((feature, featureIndex) => (
+                    <li key={featureIndex} className="flex items-center gap-3">
+                      <div className="w-5 h-5 rounded-full bg-primary/20 flex items-center justify-center flex-shrink-0">
+                        <Check className="w-3 h-3 text-primary" />
+                      </div>
+                      <span className="text-muted-foreground text-sm">
+                        {feature}
+                      </span>
+                    </li>
+                  ))}
+                </ul>
+
+                <a href={whatsappUrl} target="_blank" rel="noopener noreferrer" className="w-full">
+                  <Button
+                    variant={plan.popular ? "hero" : "glass"}
+                    className="w-full"
+                    size="lg"
+                  >
+                    <MessageCircle className="w-4 h-4" />
+                    Get Started
+                  </Button>
+                </a>
+              </div>
+            );
+          })}
         </div>
 
         <p className="text-center text-muted-foreground text-sm mt-10">
