@@ -1,7 +1,7 @@
 import { useRef, useEffect, useState, useCallback } from 'react';
 import { ChevronLeft, ChevronRight, Play, Star, Calendar, Clock, Tv, Trophy, Radio } from 'lucide-react';
 import { MediaItem } from '@/types/media';
-import { getMediaItems } from '@/lib/mediaStorage';
+import { mediaApi } from '@/lib/api';
 
 interface ContentRowProps {
   title: string;
@@ -209,9 +209,16 @@ const ContentShowcase = () => {
   const [mediaItems, setMediaItems] = useState<MediaItem[]>([]);
 
   useEffect(() => {
-    // Load from admin panel storage
-    const items = getMediaItems();
-    setMediaItems(items);
+    // Load from API (same source as admin panel)
+    const loadMedia = async () => {
+      try {
+        const items = await mediaApi.getAll();
+        setMediaItems(items);
+      } catch (error) {
+        console.error('Failed to load media:', error);
+      }
+    };
+    loadMedia();
   }, []);
 
   const footballMatches = mediaItems.filter(m => m.category === 'football');
