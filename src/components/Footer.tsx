@@ -169,9 +169,9 @@ const Footer = () => {
                 </a>
               </li>
               <li>
-                <a className="flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors text-sm" href="mailto:support@streamflux.shop">
+                <a className="flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors text-sm" href="mailto:support@konnecttv.shop">
                   <Mail className="w-4 h-4" />
-                  support@streamflux.shop
+                  support@konnecttv.shop
                 </a>
               </li>
             </ul>

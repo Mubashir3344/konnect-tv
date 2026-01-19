@@ -5,7 +5,7 @@ import { Tv, Lock, Eye, EyeOff } from 'lucide-react';
 import { toast } from 'sonner';
 
 // Hardcoded credentials
-const ADMIN_EMAIL = "admin@streamflux.shop";
+const ADMIN_EMAIL = "admin@konnecttv.shop";
 const ADMIN_PASSWORD = "Konnect TV@2024";
 
 interface AdminLoginProps {
@@ -76,7 +76,7 @@ const AdminLogin = ({ onLogin }: AdminLoginProps) => {
                 onChange={(e) => setEmail(e.target.value)}
                 required
                 className="w-full px-4 py-3 rounded-lg bg-secondary border border-border text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-primary transition-colors"
-                placeholder="admin@streamflux.tv"
+                placeholder="admin@konnecttv.shop"
               />
             </div>
 
