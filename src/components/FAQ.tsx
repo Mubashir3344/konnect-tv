@@ -7,8 +7,8 @@ import {
 
 const faqs = [
   {
-    question: "What is StreamFlux and how does it work?",
-    answer: "StreamFlux delivers television content over the internet instead of traditional cable or satellite. You simply need an internet connection and a compatible device to stream live TV channels, movies, and on-demand content.",
+    question: "What is Konnect TV and how does it work?",
+    answer: "Konnect TV delivers television content over the internet instead of traditional cable or satellite. You simply need an internet connection and a compatible device to stream live TV channels, movies, and on-demand content.",
   },
   {
     question: "What internet speed do I need?",

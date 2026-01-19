@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { Menu, X, Tv } from "lucide-react";
+import { Menu, X } from "lucide-react";
+import logo from "@/assets/logo.png";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -18,11 +19,15 @@ const Navbar = () => {
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between h-16 md:h-20">
           {/* Logo */}
-          <a href="/" className="flex items-center gap-2 group">
-            <div className="w-10 h-10 rounded-xl bg-primary flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
-              <Tv className="w-5 h-5 text-primary-foreground" />
+          <a href="/" className="flex items-center group">
+            <div className="h-12 w-32 md:h-14 md:w-36 group-hover:scale-110 transition-transform duration-300">
+              <img 
+                src={logo} 
+                alt="Konnect TV Logo" 
+                className="h-full w-full object-contain"
+                style={{ mixBlendMode: 'multiply' }}
+              />
             </div>
-            <span className="text-xl font-bold text-foreground">StreamFlux</span>
           </a>
 
           {/* Desktop Nav */}

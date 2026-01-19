@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom';
-import { Tv, ArrowLeft } from 'lucide-react';
+import { ArrowLeft } from 'lucide-react';
+import logo from '@/assets/logo.png';
 
 const PrivacyPolicy = () => {
   return (
@@ -12,11 +13,16 @@ const PrivacyPolicy = () => {
               <Link to="/" className="p-2 rounded-lg hover:bg-secondary transition-colors">
                 <ArrowLeft className="w-5 h-5 text-muted-foreground" />
               </Link>
-              <div className="flex items-center gap-2">
-                <div className="w-10 h-10 rounded-xl bg-primary flex items-center justify-center">
-                  <Tv className="w-5 h-5 text-primary-foreground" />
+              <div className="flex items-center gap-3">
+                <div className="h-9 w-24">
+                  <img 
+                    src={logo} 
+                    alt="Konnect TV Logo" 
+                    className="h-full w-full object-contain"
+                    style={{ mixBlendMode: 'multiply' }}
+                  />
                 </div>
-                <span className="text-xl font-bold text-foreground">StreamFlux</span>
+                <span className="text-xl font-bold text-foreground">Konnect TV</span>
               </div>
             </div>
           </div>
@@ -32,7 +38,7 @@ const PrivacyPolicy = () => {
           <section className="glass-card rounded-xl p-6">
             <h2 className="text-xl font-semibold text-foreground mb-4">1. Introduction</h2>
             <p className="text-muted-foreground leading-relaxed">
-              StreamFlux ("we," "our," or "us") is committed to protecting your privacy. This Privacy Policy explains how we collect, use, disclose, and safeguard your information when you use our streaming services.
+              Konnect TV ("we," "our," or "us") is committed to protecting your privacy. This Privacy Policy explains how we collect, use, disclose, and safeguard your information when you use our streaming services.
             </p>
           </section>
 

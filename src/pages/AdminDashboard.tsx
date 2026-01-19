@@ -6,7 +6,6 @@ import MediaCard from '@/components/admin/MediaCard';
 import MediaFormModal from '@/components/admin/MediaFormModal';
 import { Button } from '@/components/ui/button';
 import { 
-  Tv, 
   ArrowLeft, 
   Plus, 
   Trophy, 
@@ -18,6 +17,7 @@ import {
   List,
   Loader2
 } from 'lucide-react';
+import logo from '@/assets/logo.png';
 import { toast } from 'sonner';
 
 type TabType = 'all' | 'football' | 'sports' | 'movies' | 'series';
@@ -118,9 +118,14 @@ const AdminDashboard = () => {
               <Link to="/" className="p-2 rounded-lg hover:bg-secondary transition-colors">
                 <ArrowLeft className="w-5 h-5 text-muted-foreground" />
               </Link>
-              <div className="flex items-center gap-2">
-                <div className="w-10 h-10 rounded-xl bg-primary flex items-center justify-center">
-                  <Tv className="w-5 h-5 text-primary-foreground" />
+              <div className="flex items-center gap-3">
+                <div className="h-9 w-24">
+                  <img 
+                    src={logo} 
+                    alt="Konnect TV Logo" 
+                    className="h-full w-full object-contain"
+                    style={{ mixBlendMode: 'multiply' }}
+                  />
                 </div>
                 <div>
                   <h1 className="font-semibold text-foreground">Media Manager</h1>

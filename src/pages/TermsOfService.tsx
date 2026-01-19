@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom';
-import { Tv, ArrowLeft } from 'lucide-react';
+import { ArrowLeft } from 'lucide-react';
+import logo from '@/assets/logo.png';
 
 const TermsOfService = () => {
   return (
@@ -12,11 +13,16 @@ const TermsOfService = () => {
               <Link to="/" className="p-2 rounded-lg hover:bg-secondary transition-colors">
                 <ArrowLeft className="w-5 h-5 text-muted-foreground" />
               </Link>
-              <div className="flex items-center gap-2">
-                <div className="w-10 h-10 rounded-xl bg-primary flex items-center justify-center">
-                  <Tv className="w-5 h-5 text-primary-foreground" />
+              <div className="flex items-center gap-3">
+                <div className="h-9 w-24">
+                  <img 
+                    src={logo} 
+                    alt="Konnect TV Logo" 
+                    className="h-full w-full object-contain"
+                    style={{ mixBlendMode: 'multiply' }}
+                  />
                 </div>
-                <span className="text-xl font-bold text-foreground">StreamFlux</span>
+                <span className="text-xl font-bold text-foreground">Konnect TV</span>
               </div>
             </div>
           </div>
@@ -32,14 +38,14 @@ const TermsOfService = () => {
           <section className="glass-card rounded-xl p-6">
             <h2 className="text-xl font-semibold text-foreground mb-4">1. Acceptance of Terms</h2>
             <p className="text-muted-foreground leading-relaxed">
-              By accessing and using StreamFlux services, you acknowledge that you have read, understood, and agree to be bound by these Terms of Service. If you do not agree to these terms, please do not use our services.
+              By accessing and using Konnect TV services, you acknowledge that you have read, understood, and agree to be bound by these Terms of Service. If you do not agree to these terms, please do not use our services.
             </p>
           </section>
 
           <section className="glass-card rounded-xl p-6">
             <h2 className="text-xl font-semibold text-foreground mb-4">2. Description of Service</h2>
             <p className="text-muted-foreground leading-relaxed mb-4">
-              StreamFlux provides premium streaming services, including but not limited to:
+              Konnect TV provides premium streaming services, including but not limited to:
             </p>
             <ul className="list-disc list-inside text-muted-foreground space-y-2">
               <li>Access to live television channels</li>
@@ -67,7 +73,7 @@ const TermsOfService = () => {
           <section className="glass-card rounded-xl p-6">
             <h2 className="text-xl font-semibold text-foreground mb-4">4. Subscription and Payments</h2>
             <p className="text-muted-foreground leading-relaxed mb-4">
-              StreamFlux offers various subscription plans. By subscribing, you agree to:
+              Konnect TV offers various subscription plans. By subscribing, you agree to:
             </p>
             <ul className="list-disc list-inside text-muted-foreground space-y-2">
               <li>Pay the applicable subscription fees in advance</li>
@@ -94,14 +100,14 @@ const TermsOfService = () => {
           <section className="glass-card rounded-xl p-6">
             <h2 className="text-xl font-semibold text-foreground mb-4">6. Service Availability</h2>
             <p className="text-muted-foreground leading-relaxed">
-              While we strive for 99.9% uptime, StreamFlux does not guarantee uninterrupted access to services. We reserve the right to modify, suspend, or discontinue services for maintenance, updates, or other operational reasons. We are not liable for any service interruptions.
+              While we strive for 99.9% uptime, Konnect TV does not guarantee uninterrupted access to services. We reserve the right to modify, suspend, or discontinue services for maintenance, updates, or other operational reasons. We are not liable for any service interruptions.
             </p>
           </section>
 
           <section className="glass-card rounded-xl p-6">
             <h2 className="text-xl font-semibold text-foreground mb-4">7. Intellectual Property</h2>
             <p className="text-muted-foreground leading-relaxed">
-              All content, trademarks, and intellectual property on StreamFlux are owned by their respective owners. You are granted a limited, non-exclusive license to access and view content for personal, non-commercial use only.
+              All content, trademarks, and intellectual property on Konnect TV are owned by their respective owners. You are granted a limited, non-exclusive license to access and view content for personal, non-commercial use only.
             </p>
           </section>
 
@@ -115,7 +121,7 @@ const TermsOfService = () => {
           <section className="glass-card rounded-xl p-6">
             <h2 className="text-xl font-semibold text-foreground mb-4">9. Limitation of Liability</h2>
             <p className="text-muted-foreground leading-relaxed">
-              StreamFlux shall not be liable for any indirect, incidental, special, or consequential damages arising from the use of our services. Our total liability shall not exceed the amount paid by you in the preceding 12 months.
+              Konnect TV shall not be liable for any indirect, incidental, special, or consequential damages arising from the use of our services. Our total liability shall not exceed the amount paid by you in the preceding 12 months.
             </p>
           </section>
 

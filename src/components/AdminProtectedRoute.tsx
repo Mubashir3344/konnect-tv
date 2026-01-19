@@ -6,7 +6,7 @@ import { toast } from 'sonner';
 
 // Hardcoded credentials
 const ADMIN_EMAIL = "admin@streamflux.shop";
-const ADMIN_PASSWORD = "StreamFlux@2024";
+const ADMIN_PASSWORD = "Konnect TV@2024";
 
 interface AdminLoginProps {
   onLogin: () => void;
@@ -40,11 +40,16 @@ const AdminLogin = ({ onLogin }: AdminLoginProps) => {
       <div className="w-full max-w-md">
         {/* Logo */}
         <div className="text-center mb-8">
-          <a href="/" className="inline-flex items-center gap-2 group">
-            <div className="w-12 h-12 rounded-xl bg-primary flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
-              <Tv className="w-6 h-6 text-primary-foreground" />
+          <a href="/" className="inline-flex items-center gap-3 group">
+            <div className="h-12 w-32 group-hover:scale-110 transition-transform duration-300">
+              <img 
+                src={logo} 
+                alt="Konnect TV Logo" 
+                className="h-full w-full object-contain"
+                style={{ mixBlendMode: 'multiply' }}
+              />
             </div>
-            <span className="text-2xl font-bold text-foreground">StreamFlux</span>
+            <span className="text-2xl font-bold text-foreground">Konnect TV</span>
           </a>
         </div>
 

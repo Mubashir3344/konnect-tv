@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
-import { Tv, Mail, MessageCircle, Film, Monitor, Play, Radio } from "lucide-react";
+import { Mail, MessageCircle, Film, Monitor, Play, Radio } from "lucide-react";
+import logo from "@/assets/logo.png";
 
 // Social Media Icons as SVG components
 const FacebookIcon = () => <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
@@ -80,11 +81,16 @@ const Footer = () => {
         <div className="grid grid-cols-1 md:grid-cols-4 gap-10 mb-12">
           {/* Brand */}
           <div className="md:col-span-1">
-            <a href="#" className="flex items-center gap-2 mb-4">
-              <div className="w-10 h-10 rounded-xl bg-primary flex items-center justify-center">
-                <Tv className="w-5 h-5 text-primary-foreground" />
+            <a href="#" className="flex items-center gap-3 mb-4">
+              <div className="h-10 w-28">
+                <img 
+                  src={logo} 
+                  alt="Konnect TV Logo" 
+                  className="h-full w-full object-contain"
+                  style={{ mixBlendMode: 'multiply' }}
+                />
               </div>
-              <span className="text-xl font-bold text-foreground">StreamFlux</span>
+              <span className="text-xl font-bold text-foreground">Konnect TV</span>
             </a>
             <p className="text-muted-foreground text-sm leading-relaxed mb-6">
               Premium streaming service providing the best entertainment experience with 50,000+ channels worldwide.
@@ -180,7 +186,7 @@ const Footer = () => {
 
         <div className="pt-8 border-t border-border/50 flex flex-col md:flex-row items-center justify-between gap-4">
           <p className="text-muted-foreground text-sm">
-            © {currentYear} StreamFlux. All rights reserved.
+            © {currentYear} Konnect TV. All rights reserved.
           </p>
           <div className="flex items-center gap-4">
             <div className="flex items-center gap-2 text-sm text-muted-foreground">

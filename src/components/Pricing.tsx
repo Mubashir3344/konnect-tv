@@ -19,81 +19,47 @@ const durations = [
   { value: "lifetime", label: "Lifetime" },
 ];
 
-const connections = [
+// Connection options per plan
+const basicConnections = [
+  { value: "1", label: "1 Connection" },
+  { value: "2", label: "2 Connections" },
+];
+
+const premiumConnections = [
   { value: "1", label: "1 Connection" },
   { value: "2", label: "2 Connections" },
   { value: "3", label: "3 Connections" },
-  { value: "5", label: "5 Connections" },
 ];
-
-// Connection multipliers for pricing
-const connectionMultipliers: Record<string, number> = {
-  "1": 1,
-  "2": 1.7,
-  "3": 2.3,
-  "5": 3.5,
-};
 
 const plans = [
   {
     name: "Basic",
-    description: "Essential streaming for casual viewers",
+    description: "Perfect for personal use",
+    basePrice: 25,
+    connections: basicConnections,
     features: [
-      "22,000 Live TV Channels",
-      "85,000 Movies & TV Series",
-      "HD Quality",
-      "24/7 Support",
+      "22,000+ Live TV Channels",
+      "85,000+ Movies & TV Series",
+      "HD Quality Streaming",
+      "1-2 Simultaneous Connections",
+      "24/7 Customer Support",
     ],
     popular: false,
-    pricing: {
-      "1": 10,
-      "3": 20,
-      "6": 30,
-      "12": 45,
-      "24": 80,
-      "lifetime": 400,
-    },
   },
   {
-    name: "Pro",
-    description: "Enhanced experience for regular viewers",
+    name: "Premium",
+    description: "Ideal for families and power users",
+    basePrice: 40,
+    connections: premiumConnections,
     features: [
-      "30,000 Live TV Channels",
-      "110,000 Movies & TV Series",
-      "HD & FHD Quality",
-      "24/7 Priority Support",
-      "7-Day Catch-Up",
-    ],
-    popular: true,
-    pricing: {
-      "1": 13,
-      "3": 26,
-      "6": 38,
-      "12": 60,
-      "24": 100,
-      "lifetime": 450,
-    },
-  },
-  {
-    name: "Ultra",
-    description: "Premium experience for power users",
-    features: [
-      "50,000 Live TV Channels",
-      "200,000 Movies & TV Series",
+      "50,000+ Live TV Channels",
+      "200,000+ Movies & TV Series",
       "HD, FHD & 4K Quality",
-      "24/7 VIP Support",
-      "14-Day Catch-Up",
+      "1-3 Simultaneous Connections",
+      "24/7 Priority Support",
       "PPV Events Included",
     ],
-    popular: false,
-    pricing: {
-      "1": 16,
-      "3": 32,
-      "6": 50,
-      "12": 80,
-      "24": 120,
-      "lifetime": 500,
-    },
+    popular: true,
   },
 ];
 
@@ -103,13 +69,11 @@ const Pricing = () => {
   const [selectedDurations, setSelectedDurations] = useState<Record<number, string>>({
     0: "1",
     1: "1",
-    2: "1",
   });
 
   const [selectedConnections, setSelectedConnections] = useState<Record<number, string>>({
     0: "1",
     1: "1",
-    2: "1",
   });
 
   const handleDurationChange = (planIndex: number, duration: string) => {
@@ -131,40 +95,45 @@ const Pricing = () => {
     return duration?.label || "1 Month";
   };
 
-  const getConnectionLabel = (value: string) => {
-    const connection = connections.find((c) => c.value === value);
+  const getConnectionLabel = (planConnections: typeof basicConnections, value: string) => {
+    const connection = planConnections.find((c) => c.value === value);
     return connection?.label || "1 Connection";
   };
 
-  const calculatePrice = (basePrice: number, connectionCount: string) => {
-    const multiplier = connectionMultipliers[connectionCount] || 1;
-    return Math.round(basePrice * multiplier);
-  };
-
-  const calculateOriginalPrice = (planIndex: number, duration: string, connectionCount: string) => {
-    // Calculate what the price would be if paying monthly for the same period
-    const monthlyPrice = plans[planIndex].pricing["1"];
-    const months = duration === "lifetime" ? 60 : parseInt(duration);
-    const multiplier = connectionMultipliers[connectionCount] || 1;
-    return Math.round(monthlyPrice * months * multiplier);
+  const calculatePrice = (basePrice: number, duration: string) => {
+    const durationMultipliers: Record<string, number> = {
+      "1": 1,
+      "3": 3,
+      "6": 6,
+      "12": 12,
+      "24": 24,
+      "lifetime": 60,
+    };
+    const months = durationMultipliers[duration] || 1;
+    return basePrice * months;
   };
 
   const getDiscountPercentage = (duration: string) => {
     const discounts: Record<string, number> = {
       "1": 0,
-      "3": 33,
-      "6": 50,
-      "12": 63,
-      "24": 67,
-      "lifetime": 87,
+      "3": 10,
+      "6": 20,
+      "12": 30,
+      "24": 40,
+      "lifetime": 50,
     };
     return discounts[duration] || 0;
   };
 
+  const calculateDiscountedPrice = (basePrice: number, duration: string) => {
+    const fullPrice = calculatePrice(basePrice, duration);
+    const discount = getDiscountPercentage(duration);
+    return Math.round(fullPrice * (1 - discount / 100));
+  };
+
   const generateWhatsAppUrl = (planName: string, duration: string, connection: string, price: number) => {
     const durationLabel = getDurationLabel(duration);
-    const connectionLabel = getConnectionLabel(connection);
-    const message = `Hi! I'm interested in the *${planName} Plan*.\n\n📋 *Order Details:*\n• Plan: ${planName}\n• Duration: ${durationLabel}\n• Connections: ${connectionLabel}\n• Total Price: $${price}\n\nPlease help me get started!`;
+    const message = `Hi! I'm interested in the *${planName} Plan*.\n\n📋 *Order Details:*\n• Plan: ${planName} ($${planName === "Basic" ? "25" : "40"}/month)\n• Duration: ${durationLabel}\n• Connections: ${connection} Connection${connection !== "1" ? "s" : ""}\n• Total Price: $${price}\n\nPlease help me get started!`;
     return `https://wa.me/19177304481?text=${encodeURIComponent(message)}`;
   };
 
@@ -184,14 +153,12 @@ const Pricing = () => {
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8 max-w-6xl mx-auto">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-8 max-w-5xl mx-auto">
           {plans.map((plan, index) => {
             const selectedDuration = selectedDurations[index] || "1";
-            const selectedConnection = selectedConnections[index] || "1";
-            const basePrice = plan.pricing[selectedDuration as keyof typeof plan.pricing];
-            const currentPrice = calculatePrice(basePrice, selectedConnection);
-
-            const originalPrice = calculateOriginalPrice(index, selectedDuration, selectedConnection);
+            const selectedConnection = selectedConnections[index] || (index === 0 ? "1" : "1");
+            const currentPrice = calculateDiscountedPrice(plan.basePrice, selectedDuration);
+            const originalPrice = calculatePrice(plan.basePrice, selectedDuration);
             const discountPercentage = getDiscountPercentage(selectedDuration);
             const showDiscount = discountPercentage > 0;
 
@@ -217,9 +184,16 @@ const Pricing = () => {
                   <h3 className="text-2xl font-bold text-foreground mb-2">
                     {plan.name}
                   </h3>
-                  <p className="text-muted-foreground text-sm mb-6">
+                  <p className="text-muted-foreground text-sm mb-4">
                     {plan.description}
                   </p>
+
+                  {/* Base Price Badge */}
+                  <div className="mb-4">
+                    <span className="inline-flex items-center px-4 py-1.5 rounded-full bg-primary/20 text-primary text-base font-bold border border-primary/30">
+                      ${plan.basePrice}/month
+                    </span>
+                  </div>
 
                   {/* Discount Badge */}
                   {showDiscount && (
@@ -243,6 +217,9 @@ const Pricing = () => {
                         {currentPrice}
                       </span>
                     </div>
+                    <span className="text-xs text-muted-foreground mt-1">
+                      for {getDurationLabel(selectedDuration).toLowerCase()}
+                    </span>
                   </div>
 
                   {/* Duration Selector */}
@@ -269,10 +246,10 @@ const Pricing = () => {
                     onValueChange={(value) => handleConnectionChange(index, value)}
                   >
                     <SelectTrigger className="w-full bg-muted/50 border-border/50">
-                      <SelectValue>{getConnectionLabel(selectedConnection)}</SelectValue>
+                      <SelectValue>{getConnectionLabel(plan.connections, selectedConnection)}</SelectValue>
                     </SelectTrigger>
                     <SelectContent>
-                      {connections.map((connection) => (
+                      {plan.connections.map((connection) => (
                         <SelectItem key={connection.value} value={connection.value}>
                           {connection.label}
                         </SelectItem>

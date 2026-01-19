@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom';
-import { Tv, ArrowLeft, MessageCircle } from 'lucide-react';
+import { ArrowLeft, MessageCircle } from 'lucide-react';
+import logo from '@/assets/logo.png';
 import { Button } from '@/components/ui/button';
 
 const RefundPolicy = () => {
@@ -13,11 +14,16 @@ const RefundPolicy = () => {
               <Link to="/" className="p-2 rounded-lg hover:bg-secondary transition-colors">
                 <ArrowLeft className="w-5 h-5 text-muted-foreground" />
               </Link>
-              <div className="flex items-center gap-2">
-                <div className="w-10 h-10 rounded-xl bg-primary flex items-center justify-center">
-                  <Tv className="w-5 h-5 text-primary-foreground" />
+              <div className="flex items-center gap-3">
+                <div className="h-9 w-24">
+                  <img 
+                    src={logo} 
+                    alt="Konnect TV Logo" 
+                    className="h-full w-full object-contain"
+                    style={{ mixBlendMode: 'multiply' }}
+                  />
                 </div>
-                <span className="text-xl font-bold text-foreground">StreamFlux</span>
+                <span className="text-xl font-bold text-foreground">Konnect TV</span>
               </div>
             </div>
           </div>
@@ -33,7 +39,7 @@ const RefundPolicy = () => {
           <section className="glass-card rounded-xl p-6 border-primary/30">
             <h2 className="text-xl font-semibold text-foreground mb-4">24-Hour Money-Back Guarantee</h2>
             <p className="text-muted-foreground leading-relaxed">
-              At StreamFlux, we stand behind the quality of our service. We offer a <strong className="text-primary">24-hour money-back guarantee</strong> on all new subscriptions. If you are not satisfied with our service within the first 24 hours of your subscription, you are entitled to a full refund, no questions asked.
+              At Konnect TV, we stand behind the quality of our service. We offer a <strong className="text-primary">24-hour money-back guarantee</strong> on all new subscriptions. If you are not satisfied with our service within the first 24 hours of your subscription, you are entitled to a full refund, no questions asked.
             </p>
           </section>
 
@@ -44,7 +50,7 @@ const RefundPolicy = () => {
             </p>
             <ul className="list-disc list-inside text-muted-foreground space-y-2">
               <li>Request must be made within 24 hours of initial subscription purchase</li>
-              <li>This is your first subscription with StreamFlux</li>
+              <li>This is your first subscription with Konnect TV</li>
               <li>Account must not have been suspended for Terms of Service violations</li>
               <li>You must provide a valid reason for the refund request</li>
             </ul>
@@ -123,7 +129,7 @@ const RefundPolicy = () => {
           <section className="glass-card rounded-xl p-6">
             <h2 className="text-xl font-semibold text-foreground mb-4">Policy Changes</h2>
             <p className="text-muted-foreground leading-relaxed">
-              StreamFlux reserves the right to modify this refund policy at any time. Changes will be effective immediately upon posting on our website. Continued use of our services after changes constitutes acceptance of the updated policy.
+              Konnect TV reserves the right to modify this refund policy at any time. Changes will be effective immediately upon posting on our website. Continued use of our services after changes constitutes acceptance of the updated policy.
             </p>
           </section>
         </div>
