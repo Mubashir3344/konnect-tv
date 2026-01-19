@@ -128,7 +128,7 @@ const TermsOfService = () => {
           <section className="glass-card rounded-xl p-6">
             <h2 className="text-xl font-semibold text-foreground mb-4">10. Contact Information</h2>
             <p className="text-muted-foreground leading-relaxed">
-              For questions about these Terms of Service, please contact us via WhatsApp at +1 917 730 4481 or email at support@streamflux.tv.
+              For questions about these Terms of Service, please contact us via WhatsApp at +1 (404) 952-6878 or email at support@streamflux.tv.
             </p>
           </section>
         </div>

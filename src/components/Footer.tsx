@@ -18,7 +18,7 @@ const WhatsAppIcon = () => <svg className="w-5 h-5" fill="currentColor" viewBox=
 
 const socialLinks = [{
   name: "WhatsApp",
-  href: "https://wa.me/19177304481",
+  href: "https://wa.me/14049526878",
   icon: WhatsAppIcon,
   hoverColor: "hover:text-green-400 hover:bg-green-400/10"
 }, {
@@ -163,9 +163,9 @@ const Footer = () => {
             <h4 className="font-semibold text-foreground mb-4">Contact Us</h4>
             <ul className="space-y-3">
               <li>
-                <a href="https://wa.me/19177304481" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 text-muted-foreground hover:text-green-400 transition-colors text-sm">
+                <a href="https://wa.me/14049526878" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 text-muted-foreground hover:text-green-400 transition-colors text-sm">
                   <MessageCircle className="w-4 h-4" />
-                  WhatsApp: +1 917 730 4481
+                  WhatsApp: +1 (404) 952-6878
                 </a>
               </li>
               <li>
@@ -177,7 +177,7 @@ const Footer = () => {
             </ul>
 
             {/* CTA Button */}
-            <a href="https://wa.me/19177304481" target="_blank" rel="noopener noreferrer" className="mt-6 inline-flex items-center gap-2 px-4 py-2.5 rounded-lg bg-green-500 text-white font-medium text-sm hover:bg-green-600 transition-colors">
+            <a href="https://wa.me/14049526878" target="_blank" rel="noopener noreferrer" className="mt-6 inline-flex items-center gap-2 px-4 py-2.5 rounded-lg bg-green-500 text-white font-medium text-sm hover:bg-green-600 transition-colors">
               <WhatsAppIcon />
               Chat on WhatsApp
             </a>

@@ -45,7 +45,7 @@ const Navbar = () => {
 
           {/* CTA Button */}
           <div className="hidden md:flex items-center gap-3">
-            <a href="https://wa.me/19177304481" target="_blank" rel="noopener noreferrer">
+            <a href="https://wa.me/14049526878" target="_blank" rel="noopener noreferrer">
               <Button variant="hero" size="sm">
                 Get Started
               </Button>
@@ -76,7 +76,7 @@ const Navbar = () => {
                 </a>
               ))}
               <div className="flex flex-col gap-2 pt-4 border-t border-border/30">
-                <a href="https://wa.me/19177304481" target="_blank" rel="noopener noreferrer" className="w-full">
+                <a href="https://wa.me/14049526878" target="_blank" rel="noopener noreferrer" className="w-full">
                   <Button variant="hero" className="w-full justify-center">
                     Get Started
                   </Button>
