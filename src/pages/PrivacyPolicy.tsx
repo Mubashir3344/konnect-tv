@@ -149,7 +149,7 @@ const PrivacyPolicy = () => {
           <section className="glass-card rounded-xl p-6">
             <h2 className="text-xl font-semibold text-foreground mb-4">11. Contact Us</h2>
             <p className="text-muted-foreground leading-relaxed">
-              For questions or concerns about this Privacy Policy or our data practices, please contact us via WhatsApp at +1 (404) 952-6878 or email at support@konnecttv.shop.
+              For questions or concerns about this Privacy Policy or our data practices, please contact us via WhatsApp at +1 (404) 916-4100 or email at support@konnecttv.shop.
             </p>
           </section>
         </div>

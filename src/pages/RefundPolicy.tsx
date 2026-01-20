@@ -77,7 +77,7 @@ const RefundPolicy = () => {
               To request a refund, please follow these steps:
             </p>
             <ol className="list-decimal list-inside text-muted-foreground space-y-3">
-              <li>Contact us via WhatsApp at +1 (404) 952-6878 within 24 hours of purchase</li>
+              <li>Contact us via WhatsApp at +1 (404) 916-4100 within 24 hours of purchase</li>
               <li>Provide your account email and order/transaction ID</li>
               <li>Briefly explain the reason for your refund request</li>
               <li>Our support team will review your request within 24 hours</li>
@@ -118,7 +118,7 @@ const RefundPolicy = () => {
             <p className="text-muted-foreground leading-relaxed mb-6">
               For refund requests or questions about our refund policy, please contact our support team. We are available 24/7 to assist you.
             </p>
-            <a href="https://wa.me/14049526878" target="_blank" rel="noopener noreferrer">
+            <a href="https://wa.me/14049164100" target="_blank" rel="noopener noreferrer">
               <Button variant="hero" size="lg">
                 <MessageCircle className="w-5 h-5" />
                 Contact Support on WhatsApp
