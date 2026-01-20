@@ -1,8 +1,9 @@
 import { useState } from 'react';
 import { Navigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
-import { Tv, Lock, Eye, EyeOff } from 'lucide-react';
+import { Lock, Eye, EyeOff } from 'lucide-react';
 import { toast } from 'sonner';
+import logo from '@/assets/logo.png';
 
 // Hardcoded credentials
 const ADMIN_EMAIL = "admin@konnecttv.shop";
