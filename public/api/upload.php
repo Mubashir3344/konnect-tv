@@ -52,7 +52,7 @@ $filepath = $uploadDir . $filename;
 // Move uploaded file
 if (move_uploaded_file($file['tmp_name'], $filepath)) {
     // Return the full URL path
-    $url = 'https://streamflux.shop/api/uploads/' . $filename;
+    $url = 'https://konnecttv.shop/api/uploads/' . $filename;
     
     sendResponse([
         'success' => true,

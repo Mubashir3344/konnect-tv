@@ -1,5 +1,5 @@
--- StreamFlux Database Schema for MySQL
--- Database: u774404044_streamflux
+-- Konnect TV Database Schema for MySQL
+-- Database: u774404044_konnect
 
 -- Create media_items table
 CREATE TABLE IF NOT EXISTS media_items (
