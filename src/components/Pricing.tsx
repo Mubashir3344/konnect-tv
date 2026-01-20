@@ -26,9 +26,9 @@ const basicConnections = [
 ];
 
 const premiumConnections = [
-  { value: "1", label: "1 Connection" },
-  { value: "2", label: "2 Connections" },
   { value: "3", label: "3 Connections" },
+  { value: "4", label: "4 Connections" },
+  { value: "5", label: "5 Connections" },
 ];
 
 const plans = [
@@ -55,7 +55,7 @@ const plans = [
       "50,000+ Live TV Channels",
       "200,000+ Movies & TV Series",
       "HD, FHD & 4K Quality",
-      "1-3 Simultaneous Connections",
+      "3-5 Simultaneous Connections",
       "24/7 Priority Support",
       "PPV Events Included",
     ],
@@ -73,7 +73,7 @@ const Pricing = () => {
 
   const [selectedConnections, setSelectedConnections] = useState<Record<number, string>>({
     0: "1",
-    1: "1",
+    1: "3",
   });
 
   const handleDurationChange = (planIndex: number, duration: string) => {
@@ -131,9 +131,8 @@ const Pricing = () => {
     return Math.round(fullPrice * (1 - discount / 100));
   };
 
-  const generateWhatsAppUrl = (planName: string, duration: string, connection: string, price: number) => {
-    const durationLabel = getDurationLabel(duration);
-    const message = `Hi! I'm interested in the *${planName} Plan*.\n\n📋 *Order Details:*\n• Plan: ${planName} ($${planName === "Basic" ? "25" : "40"}/month)\n• Duration: ${durationLabel}\n• Connections: ${connection} Connection${connection !== "1" ? "s" : ""}\n• Total Price: $${price}\n\nPlease help me get started!`;
+  const generateWhatsAppUrl = (planName: string, connection: string, price: number) => {
+    const message = `Hi! I'm interested in the *${planName} Plan*.\n\n📋 *Order Details:*\n• Plan: ${planName} ($${price}/month)\n• Connections: ${connection} Connection${connection !== "1" ? "s" : ""}\n• Total Price: $${price}\n\nPlease help me get started!`;
     return `https://wa.me/14049164100?text=${encodeURIComponent(message)}`;
   };
 
@@ -155,12 +154,8 @@ const Pricing = () => {
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-8 max-w-5xl mx-auto">
           {plans.map((plan, index) => {
-            const selectedDuration = selectedDurations[index] || "1";
-            const selectedConnection = selectedConnections[index] || (index === 0 ? "1" : "1");
-            const currentPrice = calculateDiscountedPrice(plan.basePrice, selectedDuration);
-            const originalPrice = calculatePrice(plan.basePrice, selectedDuration);
-            const discountPercentage = getDiscountPercentage(selectedDuration);
-            const showDiscount = discountPercentage > 0;
+            const selectedConnection = selectedConnections[index] || (index === 0 ? "1" : "3");
+            const currentPrice = plan.basePrice;
 
             return (
               <div
@@ -188,56 +183,18 @@ const Pricing = () => {
                     {plan.description}
                   </p>
 
-                  {/* Base Price Badge */}
-                  <div className="mb-4">
-                    <span className="inline-flex items-center px-4 py-1.5 rounded-full bg-primary/20 text-primary text-base font-bold border border-primary/30">
-                      ${plan.basePrice}/month
-                    </span>
-                  </div>
-
-                  {/* Discount Badge */}
-                  {showDiscount && (
-                    <div className="mb-3">
-                      <span className="inline-flex items-center px-3 py-1 rounded-full bg-green-500/20 text-green-400 text-sm font-semibold border border-green-500/30">
-                        Save {discountPercentage}%
-                      </span>
-                    </div>
-                  )}
-
                   {/* Price Display */}
                   <div className="flex flex-col items-center justify-center gap-1 mb-4">
-                    {showDiscount && (
-                      <span className="text-lg text-muted-foreground line-through">
-                        ${originalPrice}
-                      </span>
-                    )}
                     <div className="flex items-baseline gap-1">
                       <span className="text-2xl text-muted-foreground">$</span>
                       <span className="text-5xl lg:text-6xl font-bold text-foreground transition-all duration-300">
                         {currentPrice}
                       </span>
                     </div>
-                    <span className="text-xs text-muted-foreground mt-1">
-                      for {getDurationLabel(selectedDuration).toLowerCase()}
+                    <span className="text-sm text-muted-foreground mt-1">
+                      per month
                     </span>
                   </div>
-
-                  {/* Duration Selector */}
-                  <Select
-                    value={selectedDuration}
-                    onValueChange={(value) => handleDurationChange(index, value)}
-                  >
-                    <SelectTrigger className="w-full bg-muted/50 border-border/50 mb-3">
-                      <SelectValue>{getDurationLabel(selectedDuration)}</SelectValue>
-                    </SelectTrigger>
-                    <SelectContent>
-                      {durations.map((duration) => (
-                        <SelectItem key={duration.value} value={duration.value}>
-                          {duration.label}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
 
 
                   {/* Connections Selector */}
@@ -272,7 +229,7 @@ const Pricing = () => {
                 </ul>
 
                 <a 
-                  href={generateWhatsAppUrl(plan.name, selectedDuration, selectedConnection, currentPrice)} 
+                  href={generateWhatsAppUrl(plan.name, selectedConnection, currentPrice)} 
                   target="_blank" 
                   rel="noopener noreferrer" 
                   className="w-full"
