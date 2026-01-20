@@ -1,8 +1,8 @@
 <?php
 // Database Configuration
 define('DB_HOST', 'localhost');
-define('DB_NAME', 'u774404044_streamflux');
-define('DB_USER', 'u774404044_streamflux');
+define('DB_NAME', 'u774404044_konnect');
+define('DB_USER', 'u774404044_konnect');
 define('DB_PASS', 'Bashi12345@');
 
 // CORS Headers - Allow requests from your Lovable domain
