@@ -77,7 +77,7 @@ const RefundPolicy = () => {
               To request a refund, please follow these steps:
             </p>
             <ol className="list-decimal list-inside text-muted-foreground space-y-3">
-              <li>Contact us via WhatsApp at +1 (404) 916-4100 within 24 hours of purchase</li>
+              <li>Contact us via WhatsApp at +1 (229) 299-7649 within 24 hours of purchase</li>
               <li>Provide your account email and order/transaction ID</li>
               <li>Briefly explain the reason for your refund request</li>
               <li>Our support team will review your request within 24 hours</li>
