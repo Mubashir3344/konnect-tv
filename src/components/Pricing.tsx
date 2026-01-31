@@ -63,7 +63,7 @@ const plans = [
   },
 ];
 
-const whatsappUrl = "https://wa.me/14049164100";
+const whatsappUrl = "https://wa.me/12292997649";
 
 const Pricing = () => {
   const [selectedDurations, setSelectedDurations] = useState<Record<number, string>>({
@@ -133,7 +133,7 @@ const Pricing = () => {
 
   const generateWhatsAppUrl = (planName: string, connection: string, price: number) => {
     const message = `Hi! I'm interested in the *${planName} Plan*.\n\n📋 *Order Details:*\n• Plan: ${planName} ($${price}/month)\n• Connections: ${connection} Connection${connection !== "1" ? "s" : ""}\n• Total Price: $${price}\n\nPlease help me get started!`;
-    return `https://wa.me/14049164100?text=${encodeURIComponent(message)}`;
+    return `https://wa.me/12292997649?text=${encodeURIComponent(message)}`;
   };
 
   return (

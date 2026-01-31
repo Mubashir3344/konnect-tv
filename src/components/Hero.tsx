@@ -2,7 +2,7 @@ import { Button } from "@/components/ui/button";
 import { Play, Zap, Globe, Shield, MessageCircle } from "lucide-react";
 
 const Hero = () => {
-  const whatsappUrl = "https://wa.me/14049164100";
+  const whatsappUrl = "https://wa.me/12292997649";
 
   return (
     <section className="relative min-h-screen flex items-center justify-center pt-20 overflow-hidden">

@@ -1,7 +1,7 @@
 import WhatsAppIcon from "@/components/icons/WhatsAppIcon";
 
 const WhatsAppButton = () => {
-  const whatsappUrl = "https://wa.me/14049164100";
+  const whatsappUrl = "https://wa.me/12292997649";
 
   return (
     <a

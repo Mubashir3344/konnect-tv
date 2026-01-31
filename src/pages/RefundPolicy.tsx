@@ -118,7 +118,7 @@ const RefundPolicy = () => {
             <p className="text-muted-foreground leading-relaxed mb-6">
               For refund requests or questions about our refund policy, please contact our support team. We are available 24/7 to assist you.
             </p>
-            <a href="https://wa.me/14049164100" target="_blank" rel="noopener noreferrer">
+            <a href="https://wa.me/12292997649" target="_blank" rel="noopener noreferrer">
               <Button variant="hero" size="lg">
                 <MessageCircle className="w-5 h-5" />
                 Contact Support on WhatsApp

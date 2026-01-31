@@ -18,7 +18,7 @@ const WhatsAppIcon = () => <svg className="w-5 h-5" fill="currentColor" viewBox=
 
 const socialLinks = [{
   name: "WhatsApp",
-  href: "https://wa.me/14049164100",
+  href: "https://wa.me/12292997649",
   icon: WhatsAppIcon,
   hoverColor: "hover:text-green-400 hover:bg-green-400/10"
 }, {
@@ -177,7 +177,7 @@ const Footer = () => {
             </ul>
 
             {/* CTA Button */}
-            <a href="https://wa.me/14049164100" target="_blank" rel="noopener noreferrer" className="mt-6 inline-flex items-center gap-2 px-4 py-2.5 rounded-lg bg-green-500 text-white font-medium text-sm hover:bg-green-600 transition-colors">
+            <a href="https://wa.me/12292997649" target="_blank" rel="noopener noreferrer" className="mt-6 inline-flex items-center gap-2 px-4 py-2.5 rounded-lg bg-green-500 text-white font-medium text-sm hover:bg-green-600 transition-colors">
               <WhatsAppIcon />
               Chat on WhatsApp
             </a>
